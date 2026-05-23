@@ -1,0 +1,963 @@
+/* ================================================
+   Booking Reservation Demo — BG / Step / Slide / PR Polish
+   ================================================ */
+
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; margin: 0; }
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: #e4ebf2;
+  color: #364152;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.app {
+  min-height: 100dvh;
+  background-color: var(--bg);
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  color: var(--text);
+  transition: background-color 0.35s ease;
+  overflow-x: hidden;
+}
+
+/* BG overlay per concept — ensure readability */
+.pattern-neumorphism.app {
+  background-blend-mode: soft-light;
+}
+.pattern-glassmorphism.app {
+  background-blend-mode: overlay;
+}
+.pattern-bento.app {
+  background-blend-mode: luminosity;
+}
+
+/* ================================================
+   DEMO HEADER — shared base
+   ================================================ */
+.demo-header {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+.demo-tabs { display: flex; gap: 6px; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.demo-tabs::-webkit-scrollbar { display: none; }
+.demo-tab {
+  min-height: 36px; border: 2px solid transparent; border-radius: 999px;
+  padding: 0 16px; background: var(--tint); color: var(--muted);
+  font-size: 13px; font-weight: 800; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+.demo-tab:hover { background: var(--chip); color: var(--text); }
+.demo-tab.is-active {
+  background: var(--primary); border-color: var(--primary); color: #fff;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+.icon-button {
+  display: grid; place-items: center; width: 36px; height: 36px;
+  border: 0; border-radius: 50%; padding: 0;
+  background: var(--tint); color: var(--text); flex-shrink: 0;
+}
+
+/* Neumorphism header */
+.pattern-neumorphism .demo-header { background: color-mix(in srgb, var(--bg) 96%, white); border-bottom: none; box-shadow: 0 4px 8px rgba(163,177,198,0.2); }
+.pattern-neumorphism .demo-tab { border-radius: 14px; border: none; box-shadow: 3px 3px 6px rgba(163,177,198,0.35), -3px -3px 6px rgba(255,255,255,0.7); }
+.pattern-neumorphism .demo-tab.is-active { box-shadow: inset 3px 3px 6px rgba(60,100,160,0.25), inset -3px -3px 6px rgba(120,170,230,0.15); }
+.pattern-neumorphism .icon-button { box-shadow: 3px 3px 6px rgba(163,177,198,0.35), -3px -3px 6px rgba(255,255,255,0.7); }
+
+/* Glassmorphism header */
+.pattern-glassmorphism .demo-header { background: rgba(255,255,255,0.35); border-bottom: 1px solid rgba(255,255,255,0.4); backdrop-filter: blur(24px); }
+.pattern-glassmorphism .demo-tab { background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.35); }
+.pattern-glassmorphism .demo-tab.is-active { background: var(--primary); border-color: transparent; }
+
+/* Bento header */
+.pattern-bento .demo-header { background: rgba(255,255,255,0.97); border-bottom: 2px solid var(--border); }
+.pattern-bento .demo-tab { border-radius: 8px; font-weight: 900; }
+.pattern-bento .demo-tab.is-active { border-radius: 8px; }
+
+/* ================================================
+   UNIFIED STEPPER — left-aligned, number + label
+   ================================================ */
+.unified-stepper {
+  position: sticky; top: 53px; z-index: 10;
+  display: flex; align-items: center; gap: 2px;
+  padding: 10px 12px; overflow-x: auto;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+}
+.unified-stepper::-webkit-scrollbar { display: none; }
+.unified-stepper::after {
+  content: ""; flex: 0 0 8px;
+}
+
+.step-item {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; color: var(--muted);
+  white-space: nowrap; flex-shrink: 0;
+  transition: all 0.25s;
+}
+.step-num {
+  display: grid; place-items: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--tint); color: var(--muted);
+  font-size: 11px; font-weight: 900;
+  transition: all 0.25s;
+}
+.step-item.current {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+}
+.step-item.current .step-num {
+  background: var(--primary); color: #fff;
+}
+.step-item.done { color: var(--secondary); }
+.step-item.done .step-num {
+  background: var(--secondary); color: #fff;
+}
+
+.pattern-neumorphism .unified-stepper {
+  background: color-mix(in srgb, var(--bg) 94%, white);
+  border-bottom: none; box-shadow: 0 4px 8px rgba(163,177,198,0.15);
+}
+.pattern-glassmorphism .unified-stepper {
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+.pattern-bento .unified-stepper {
+  background: rgba(255,255,255,0.97); border-bottom: 2px solid var(--border);
+}
+
+/* ================================================
+   HERO — structurally different per concept
+   ================================================ */
+.hero { position: relative; overflow: hidden; animation: fadeIn 0.5s ease-out; }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.eyebrow {
+  justify-self: start; margin: 0; padding: 8px 16px;
+  border-radius: 999px; background: rgba(255,255,255,0.93);
+  color: var(--primary); font-size: 12px; font-weight: 900; letter-spacing: 0.02em;
+}
+
+/* --- Neumorphism Hero --- */
+.pattern-neumorphism .hero { min-height: auto; background: transparent; padding: 32px 22px 0; }
+.pattern-neumorphism .hero img {
+  position: relative; width: 100%; height: 280px; border-radius: 32px; object-fit: cover;
+  box-shadow: 8px 8px 20px rgba(163,177,198,0.4), -8px -8px 20px rgba(255,255,255,0.75);
+}
+.pattern-neumorphism .hero-shade { display: none; }
+.pattern-neumorphism .hero-content {
+  position: relative; max-width: 960px; min-height: auto;
+  display: grid; gap: 14px; padding: 28px 6px 36px; margin: 0 auto; color: var(--heading);
+  text-align: center; justify-items: center;
+}
+.pattern-neumorphism .hero h1 { color: var(--heading); font-size: clamp(26px,6vw,42px); margin: 0; font-weight: 900; line-height: 1.14; }
+.pattern-neumorphism .hero p:not(.eyebrow) { color: var(--muted); text-shadow: none; font-size: 15px; font-weight: 700; line-height: 1.8; max-width: 480px; margin: 0; }
+.pattern-neumorphism .eyebrow { background: var(--chip); color: var(--primary); }
+.pattern-neumorphism .hero-actions { max-width: 360px; width: 100%; display: grid; gap: 12px; }
+.pattern-neumorphism .hero .primary-action {
+  border-radius: 20px; min-height: 62px; font-size: 18px;
+  box-shadow: 6px 6px 14px rgba(163,177,198,0.4), -6px -6px 14px rgba(255,255,255,0.75);
+}
+.pattern-neumorphism .hero .primary-action:active { box-shadow: inset 4px 4px 8px rgba(163,177,198,0.3), inset -4px -4px 8px rgba(255,255,255,0.6); }
+
+/* --- Glassmorphism Hero --- */
+.pattern-glassmorphism .hero { min-height: 680px; }
+.hero-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(18,14,10,0.02) 0%, rgba(18,14,10,0.6) 100%),
+    linear-gradient(90deg, rgba(18,14,10,0.35) 0%, transparent 65%);
+}
+.pattern-glassmorphism .hero-content {
+  position: relative; max-width: 960px; min-height: 680px;
+  display: grid; align-content: end; gap: 16px; padding: 44px 22px; margin: 0 auto; color: #fff;
+}
+.pattern-glassmorphism .hero h1 { font-size: clamp(30px,8vw,54px); text-shadow: 0 2px 16px rgba(0,0,0,0.15); margin: 0; font-weight: 900; line-height: 1.14; }
+.pattern-glassmorphism .hero p:not(.eyebrow) { max-width: 580px; color: rgba(255,255,255,0.92); font-size: 16px; font-weight: 700; line-height: 1.8; text-shadow: 0 1px 6px rgba(0,0,0,0.2); margin: 0; }
+.pattern-glassmorphism .eyebrow { background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.pattern-glassmorphism .hero-actions { display: grid; gap: 12px; max-width: 520px; }
+.pattern-glassmorphism .hero .primary-action { min-height: 58px; font-size: 17px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(217,96,48,0.35); }
+
+/* --- Bento Hero --- */
+.pattern-bento .hero { min-height: auto; background: transparent; padding: 16px 22px 0; }
+.pattern-bento .hero img { position: relative; width: 100%; height: 200px; border-radius: 12px; object-fit: cover; }
+.pattern-bento .hero-shade { display: none; }
+.pattern-bento .hero-content {
+  position: relative; max-width: 960px; min-height: auto;
+  display: grid; gap: 10px; padding: 16px 0 20px; margin: 0 auto; color: var(--heading);
+}
+.pattern-bento .hero h1 { color: var(--heading); font-size: clamp(22px,5.5vw,34px); margin: 0; font-weight: 900; line-height: 1.2; }
+.pattern-bento .hero p:not(.eyebrow) { color: var(--muted); text-shadow: none; font-size: 14px; margin: 0; font-weight: 700; }
+.pattern-bento .eyebrow { background: var(--primary); color: #fff; font-weight: 900; letter-spacing: 0.06em; border-radius: 6px; }
+.pattern-bento .hero-actions { max-width: 100%; display: grid; gap: 12px; }
+.pattern-bento .hero .primary-action { min-height: 52px; border-radius: 10px; font-size: 15px; font-weight: 900; }
+
+/* ================================================
+   BENEFITS — 3 completely different structures
+   ================================================ */
+
+/* --- Neumorphism: Floating soft chips --- */
+.neu-benefits {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  width: min(100%, 960px); margin: 0 auto; padding: 22px;
+  animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+.neu-benefit-chip {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 16px 20px; border-radius: 24px;
+  background: color-mix(in srgb, var(--bg) 90%, white);
+  box-shadow: 5px 5px 12px rgba(163,177,198,0.35), -5px -5px 12px rgba(255,255,255,0.7);
+  max-width: 320px; flex: 1 1 200px;
+}
+.neu-benefit-chip svg { flex: 0 0 auto; color: var(--primary); margin-top: 2px; }
+.neu-benefit-chip strong { display: block; color: var(--heading); font-size: 14px; font-weight: 900; }
+.neu-benefit-chip p { margin: 4px 0 0; color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.6; }
+
+/* --- Glassmorphism: Single frosted panel with keyword rows --- */
+.glass-benefits {
+  width: min(100%, 960px); margin: 0 auto; padding: 22px;
+  animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+.glass-benefit-panel {
+  display: grid; gap: 0;
+  padding: 20px 22px; border-radius: 20px;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.45);
+}
+.glass-benefit-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+}
+.glass-benefit-row:last-child { border-bottom: 0; }
+.glass-benefit-row svg { flex: 0 0 auto; color: var(--primary); margin-top: 2px; }
+.glass-benefit-row strong { display: block; color: var(--heading); font-size: 14px; font-weight: 900; }
+.glass-benefit-row span { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; font-weight: 700; }
+
+/* --- Bento: Unequal bento grid blocks --- */
+.bento-benefits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
+  width: min(100%, 960px); margin: 0 auto; padding: 16px 22px;
+  animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+.bento-benefit-block {
+  padding: 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.95); border: 2px solid var(--border);
+}
+.bento-benefit-block svg { color: var(--primary); margin-bottom: 8px; }
+.bento-benefit-block strong { display: block; color: var(--heading); font-size: 14px; font-weight: 900; }
+.bento-benefit-block p { margin: 4px 0 0; color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.5; }
+.bento-benefit-0 {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  border: none; color: #fff;
+}
+.bento-benefit-0 svg { color: #fff; }
+.bento-benefit-0 strong { color: #fff; font-size: 16px; }
+.bento-benefit-0 p { color: rgba(255,255,255,0.85); }
+.bento-benefit-1 { background: var(--chip); border-color: transparent; }
+.bento-benefit-2 { background: rgba(255,255,255,0.95); }
+
+/* ================================================
+   SHELL
+   ================================================ */
+.shell {
+  width: min(100%, 960px); margin: 0 auto; padding: 22px; padding-bottom: 100px;
+  display: grid; gap: 16px;
+}
+.shell > * { animation: fadeInUp 0.35s ease-out both; }
+.shell > *:nth-child(2) { animation-delay: 0.05s; }
+.shell > *:nth-child(3) { animation-delay: 0.1s; }
+.shell > *:nth-child(4) { animation-delay: 0.15s; }
+
+/* ================================================
+   SECTION HEADER — 3 different structures
+   ================================================ */
+
+/* --- Neumorphism --- */
+.neu-section {
+  text-align: center; padding: 20px 16px 8px;
+}
+.neu-section svg { color: var(--primary); margin-bottom: 8px; }
+.neu-section h2 {
+  margin: 0; color: var(--heading); font-size: clamp(22px,5vw,30px);
+  font-weight: 900; line-height: 1.2;
+}
+
+/* --- Glassmorphism --- */
+.glass-section {
+  padding: 18px 22px;
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+}
+.glass-section-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px; margin-bottom: 8px;
+  background: rgba(255,255,255,0.4); color: var(--primary);
+  font-size: 11px; font-weight: 900;
+}
+.glass-section-badge svg { color: var(--primary); }
+.glass-section h2 {
+  margin: 0; color: var(--heading); font-size: clamp(20px,5vw,28px);
+  font-weight: 900; line-height: 1.2;
+}
+
+/* --- Bento --- */
+.bento-banner {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  border-radius: 10px; color: #fff;
+}
+.bento-banner-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 4px; margin-bottom: 6px;
+  background: rgba(255,255,255,0.2); color: #fff;
+  font-size: 10px; font-weight: 900; letter-spacing: 0.04em;
+}
+.bento-banner-badge svg { color: #fff; }
+.bento-banner h2 {
+  margin: 0; color: #fff; font-size: clamp(18px,4.5vw,24px);
+  font-weight: 900; line-height: 1.2;
+}
+
+/* ================================================
+   BUTTONS — concept-aware
+   ================================================ */
+.primary-action, .back-action, .wide-choice {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 54px; border: 0; border-radius: 999px;
+  background: var(--primary); color: #fff; font-size: 16px; font-weight: 900;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 28%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.primary-action:hover:not(:disabled) { box-shadow: 0 12px 32px color-mix(in srgb, var(--primary) 38%, transparent); }
+.primary-action:active:not(:disabled) { transform: scale(0.97); }
+.primary-action:disabled { cursor: not-allowed; background: #ddd6cf; color: #9a9490; box-shadow: none; }
+
+.back-action { background: #5a5a5a; box-shadow: none; }
+.back-action:hover { background: #4a4a4a; }
+
+.pattern-neumorphism .primary-action {
+  border-radius: 20px;
+  box-shadow: 6px 6px 14px rgba(163,177,198,0.4), -6px -6px 14px rgba(255,255,255,0.7);
+}
+.pattern-neumorphism .primary-action:active:not(:disabled) {
+  transform: none; box-shadow: inset 4px 4px 8px rgba(163,177,198,0.3), inset -4px -4px 8px rgba(255,255,255,0.5);
+}
+.pattern-neumorphism .back-action {
+  border-radius: 20px; background: color-mix(in srgb, var(--bg) 90%, white); color: var(--muted);
+  box-shadow: 4px 4px 10px rgba(163,177,198,0.3), -4px -4px 10px rgba(255,255,255,0.65);
+}
+
+.pattern-glassmorphism .primary-action { box-shadow: 0 8px 28px rgba(217,96,48,0.3); border: 1px solid rgba(255,255,255,0.15); }
+.pattern-glassmorphism .back-action {
+  background: rgba(255,255,255,0.3); color: var(--text);
+  backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.35); box-shadow: none;
+}
+
+.pattern-bento .primary-action { border-radius: 10px; }
+.pattern-bento .back-action { border-radius: 10px; }
+
+/* ================================================
+   NEU BIG CTA
+   ================================================ */
+.neu-big-cta {
+  display: grid; gap: 10px;
+  padding: 12px 0 8px;
+  max-width: 400px; margin: 0 auto; width: 100%;
+}
+
+/* ================================================
+   GLASS CTA SHEET
+   ================================================ */
+.glass-cta-sheet {
+  display: grid; gap: 10px;
+  padding: 20px; border-radius: 20px;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* ================================================
+   BENTO FIXED BOTTOM BAR
+   ================================================ */
+.bento-bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 15;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 22px;
+  background: rgba(255,255,255,0.97); border-top: 2px solid var(--border);
+  box-shadow: 0 -4px 16px rgba(80,50,20,0.08);
+}
+.bento-bar-info { display: grid; gap: 2px; }
+.bento-bar-info small { color: var(--muted); font-size: 11px; font-weight: 800; }
+.bento-bar-info strong { color: var(--heading); font-size: 15px; font-weight: 900; }
+.bento-bottom-bar .primary-action { width: auto; min-width: 160px; flex-shrink: 0; }
+
+/* ================================================
+   PLAN FIXED CTA — shared across all patterns
+   ================================================ */
+.plan-fixed-cta {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 15;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 22px;
+  background: rgba(255,255,255,0.97); border-top: 2px solid var(--border);
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  animation: fadeInUp 0.25s ease-out;
+}
+.plan-fixed-info { display: grid; gap: 2px; min-width: 0; }
+.plan-fixed-info small { color: var(--muted); font-size: 11px; font-weight: 800; }
+.plan-fixed-info strong { color: var(--heading); font-size: 15px; font-weight: 900; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.plan-fixed-cta .primary-action { width: auto; min-width: 150px; flex-shrink: 0; }
+
+/* Neumorphism fixed CTA */
+.plan-fixed-cta-neumorphism {
+  background: color-mix(in srgb, var(--bg) 96%, white);
+  border-top: none;
+  box-shadow: 0 -6px 16px rgba(163,177,198,0.25);
+}
+
+/* Glassmorphism fixed CTA */
+.plan-fixed-cta-glassmorphism {
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 -8px 24px rgba(30,60,40,0.08);
+}
+
+/* Bento fixed CTA */
+.plan-fixed-cta-bento {
+  background: rgba(255,255,255,0.97);
+  border-top: 2px solid var(--border);
+}
+
+/* ================================================
+   PANEL — concept-aware
+   ================================================ */
+.panel {
+  display: grid; gap: 14px; padding: 20px;
+  border: 1px solid var(--border); border-radius: 20px;
+  background: rgba(255,255,255,0.88); box-shadow: 0 4px 14px rgba(40,30,20,0.04);
+}
+.panel h2 { margin: 0; color: var(--heading); font-size: 15px; font-weight: 900; }
+
+.pattern-neumorphism .panel {
+  border: none; background: color-mix(in srgb, var(--bg) 90%, white); border-radius: 28px;
+  box-shadow: 5px 5px 12px rgba(163,177,198,0.35), -5px -5px 12px rgba(255,255,255,0.7);
+}
+.pattern-glassmorphism .panel {
+  background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.45);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px;
+}
+.pattern-bento .panel {
+  border: 2px solid var(--border); border-radius: 10px;
+  background: rgba(255,255,255,0.95); box-shadow: none;
+}
+
+/* ================================================
+   PLAN CARDS — 3 completely different structures
+   ================================================ */
+
+/* --- Neumorphism: Horizontal tiles with left-half photo --- */
+.neu-plan-list { display: grid; gap: 16px; }
+.neu-plan-tile {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: none; width: 100%; overflow: hidden;
+  background: color-mix(in srgb, var(--bg) 90%, white); color: var(--text); text-align: left;
+  border-radius: 28px;
+  box-shadow: 6px 6px 14px rgba(163,177,198,0.4), -6px -6px 14px rgba(255,255,255,0.75);
+  transition: box-shadow 0.25s, transform 0.15s;
+}
+.neu-plan-tile:hover { transform: translateY(-2px); box-shadow: 8px 8px 20px rgba(163,177,198,0.45), -8px -8px 20px rgba(255,255,255,0.8); }
+.neu-plan-tile:active { transform: none; box-shadow: inset 4px 4px 10px rgba(163,177,198,0.25), inset -4px -4px 10px rgba(255,255,255,0.5); }
+.neu-plan-tile.is-selected {
+  box-shadow: inset 4px 4px 10px rgba(163,177,198,0.3), inset -4px -4px 10px rgba(255,255,255,0.55);
+  outline: 3px solid var(--primary); outline-offset: -3px;
+}
+.neu-plan-photo {
+  width: 100%; min-height: 180px; overflow: hidden;
+  border-radius: 28px 0 0 28px;
+}
+.neu-plan-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.neu-plan-text {
+  display: grid; align-content: center; gap: 6px;
+  padding: 20px 18px;
+}
+.neu-plan-tile strong { color: var(--heading); font-size: 17px; font-weight: 900; }
+.neu-plan-tile p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.6; }
+
+/* --- Glassmorphism: Horizontal scroll photo-dominant cards --- */
+.glass-carousel-wrap { position: relative; }
+.glass-plan-carousel {
+  display: flex; gap: 16px; overflow-x: auto;
+  padding: 4px 0 16px; scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.glass-plan-carousel::-webkit-scrollbar { display: none; }
+.glass-plan-card {
+  flex: 0 0 280px; scroll-snap-align: start;
+  display: grid; grid-template-rows: 200px auto;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 22px; overflow: hidden;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  text-align: left; color: var(--text);
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.glass-plan-card:hover { box-shadow: 0 14px 36px rgba(30,60,40,0.1); }
+.glass-plan-card.is-selected {
+  border-color: var(--primary); border-width: 2px;
+  box-shadow: 0 8px 28px rgba(217,96,48,0.2);
+}
+.glass-plan-card img { width: 100%; height: 200px; object-fit: cover; }
+.glass-plan-info { padding: 16px; display: grid; gap: 6px; }
+.glass-plan-info strong { color: var(--heading); font-size: 16px; font-weight: 900; }
+.glass-plan-info p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.5; }
+
+/* Carousel arrows */
+.carousel-arrow {
+  position: absolute; top: 50%; transform: translateY(-70%); z-index: 5;
+  width: 36px; height: 36px; border: 0; border-radius: 50%;
+  background: rgba(255,255,255,0.8); color: var(--heading);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  display: grid; place-items: center;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.carousel-arrow:hover { background: #fff; }
+.carousel-arrow-left { left: -4px; }
+.carousel-arrow-right { right: -4px; }
+
+/* Carousel dots */
+.carousel-dots {
+  display: flex; justify-content: center; gap: 6px; padding: 4px 0 0;
+}
+.carousel-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.5);
+  transition: all 0.25s;
+}
+.carousel-dot.active {
+  width: 20px; border-radius: 999px;
+  background: var(--primary); border-color: var(--primary);
+}
+
+/* --- Bento: 2-column ticket grid (no notch) --- */
+.bento-ticket-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.bento-ticket {
+  display: grid; grid-template-rows: 120px auto;
+  border: 2px solid var(--border); border-radius: 10px; overflow: hidden;
+  background: rgba(255,255,255,0.95); text-align: left; color: var(--text);
+  box-shadow: none; transition: border-color 0.2s;
+}
+.bento-ticket:hover { border-color: var(--primary); }
+.bento-ticket.is-selected {
+  border-color: var(--primary); border-width: 3px;
+  box-shadow: 0 2px 8px rgba(212,91,44,0.12);
+}
+.bento-ticket img { width: 100%; height: 120px; object-fit: cover; }
+.bento-ticket-body { padding: 10px 12px 12px; display: grid; gap: 4px; }
+.bento-ticket-body strong { color: var(--heading); font-size: 14px; font-weight: 900; }
+.bento-ticket-body p { margin: 0; color: var(--muted); font-size: 11px; font-weight: 700; line-height: 1.5; }
+
+/* ================================================
+   PLAN CARD CONTENT — shared across all concepts
+   ================================================ */
+.plan-pr { margin: 4px 0 2px; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.5; }
+.plan-times { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.plan-times span {
+  padding: 3px 8px; border-radius: 999px;
+  background: var(--chip); color: var(--chip-text);
+  font-size: 11px; font-weight: 800;
+}
+.pattern-neumorphism .plan-times span {
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px rgba(163,177,198,0.25), -1px -1px 3px rgba(255,255,255,0.5);
+}
+.pattern-glassmorphism .plan-times span {
+  background: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.4);
+}
+.pattern-bento .plan-times span {
+  border-radius: 4px; background: var(--tint); font-size: 10px;
+}
+.plan-actions { display: flex; gap: 8px; margin-top: 8px; }
+.plan-detail-btn, .plan-select-btn {
+  flex: 1; min-height: 36px; border: 2px solid var(--border); border-radius: 999px;
+  background: transparent; color: var(--text); font-size: 13px; font-weight: 800;
+  transition: all 0.2s;
+}
+.plan-detail-btn:hover { border-color: var(--muted); }
+.plan-select-btn { background: var(--chip); color: var(--chip-text); border-color: var(--chip); }
+.plan-select-btn:hover { border-color: var(--primary); color: var(--primary); }
+.plan-select-btn.is-selected {
+  background: var(--secondary); color: #fff; border-color: var(--secondary);
+}
+
+.pattern-neumorphism .plan-detail-btn, .pattern-neumorphism .plan-select-btn {
+  border: none; border-radius: 14px;
+  box-shadow: 2px 2px 5px rgba(163,177,198,0.3), -2px -2px 5px rgba(255,255,255,0.6);
+}
+.pattern-neumorphism .plan-select-btn.is-selected {
+  box-shadow: inset 2px 2px 4px rgba(60,120,100,0.2), inset -2px -2px 4px rgba(120,200,180,0.1);
+}
+
+.pattern-glassmorphism .plan-detail-btn {
+  background: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.4);
+}
+.pattern-glassmorphism .plan-select-btn {
+  background: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.4);
+}
+
+.pattern-bento .plan-detail-btn, .pattern-bento .plan-select-btn {
+  border-radius: 6px; min-height: 32px; font-size: 12px;
+}
+
+/* ================================================
+   CHOICE GRID & COUNTER
+   ================================================ */
+.choice-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.choice-grid button {
+  min-height: 48px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--chip); color: var(--chip-text); font-size: 13px; font-weight: 900;
+  transition: all 0.2s;
+}
+.choice-grid button.is-active {
+  border-color: var(--secondary); background: var(--secondary); color: #fff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--secondary) 22%, transparent);
+}
+
+.pattern-neumorphism .choice-grid button {
+  border: none; border-radius: 16px; background: color-mix(in srgb, var(--bg) 90%, white);
+  box-shadow: 3px 3px 7px rgba(163,177,198,0.3), -3px -3px 7px rgba(255,255,255,0.6);
+}
+.pattern-neumorphism .choice-grid button.is-active {
+  box-shadow: inset 3px 3px 6px rgba(60,120,140,0.2), inset -3px -3px 6px rgba(120,200,180,0.15);
+}
+.pattern-glassmorphism .choice-grid button {
+  background: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px);
+}
+.pattern-bento .choice-grid button { border-radius: 8px; border: 2px solid var(--border); background: rgba(255,255,255,0.95); }
+.pattern-bento .choice-grid button.is-active { border-color: var(--secondary); }
+
+.counter-row { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 8px 0; }
+.counter-row strong { font-weight: 900; }
+.counter-row > div { display: grid; grid-template-columns: 38px 44px 38px; align-items: center; gap: 4px; }
+.counter-row button {
+  width: 38px; height: 38px; border: 0; border-radius: 50%;
+  background: var(--tint); color: var(--primary); font-size: 20px; font-weight: 900;
+}
+.counter-row button:active { transform: scale(0.9); }
+.counter-row span { text-align: center; font-weight: 900; font-size: 18px; }
+
+.pattern-neumorphism .counter-row button { border-radius: 14px; box-shadow: 3px 3px 6px rgba(163,177,198,0.3), -3px -3px 6px rgba(255,255,255,0.6); }
+.pattern-bento .counter-row button { border-radius: 8px; }
+
+/* ================================================
+   WIDE CHOICE
+   ================================================ */
+.wide-choice {
+  justify-content: space-between; padding: 0 20px;
+  background: rgba(255,255,255,0.88); color: var(--text);
+  border: 2px solid var(--border); box-shadow: none;
+}
+.wide-choice:hover { border-color: var(--primary); }
+.wide-choice.secondary { background: #5a5a5a; color: #fff; border-color: transparent; }
+
+/* ================================================
+   FORM FIELDS
+   ================================================ */
+.field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.field { display: grid; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+.field span { color: var(--muted); font-size: 12px; font-weight: 800; }
+.field input, .field textarea {
+  width: 100%; min-height: 44px;
+  border: 1px solid var(--border); border-radius: 14px;
+  padding: 10px 14px; background: rgba(255,255,255,0.9); color: var(--text); font-weight: 700;
+}
+.field input:focus, .field textarea:focus {
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+.field textarea { min-height: 100px; resize: vertical; }
+
+.pattern-neumorphism .field input, .pattern-neumorphism .field textarea {
+  border: none; background: color-mix(in srgb, var(--bg) 90%, white); border-radius: 18px;
+  box-shadow: inset 3px 3px 6px rgba(163,177,198,0.3), inset -3px -3px 6px rgba(255,255,255,0.6);
+}
+.pattern-glassmorphism .field input, .pattern-glassmorphism .field textarea {
+  background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.45);
+}
+.pattern-bento .field input, .pattern-bento .field textarea { border-radius: 8px; border: 2px solid var(--border); }
+
+/* ================================================
+   PAYMENT
+   ================================================ */
+.payment-list { display: grid; gap: 10px; }
+.payment-list button {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 12px;
+  align-items: center; width: 100%; padding: 16px;
+  border: 2px solid var(--border); border-radius: 18px;
+  background: rgba(255,255,255,0.88); text-align: left;
+}
+.payment-list button.is-selected { border-color: var(--secondary); background: var(--chip); }
+.payment-list strong { color: var(--text); font-weight: 900; }
+.payment-list small { display: block; margin-top: 3px; color: var(--muted); font-weight: 700; }
+
+.pattern-neumorphism .payment-list button {
+  border: none; background: color-mix(in srgb, var(--bg) 90%, white); border-radius: 22px;
+  box-shadow: 4px 4px 10px rgba(163,177,198,0.3), -4px -4px 10px rgba(255,255,255,0.65);
+}
+.pattern-neumorphism .payment-list button.is-selected {
+  box-shadow: inset 3px 3px 6px rgba(163,177,198,0.25), inset -3px -3px 6px rgba(255,255,255,0.5);
+  outline: 2px solid var(--primary); outline-offset: -2px;
+}
+.pattern-glassmorphism .payment-list button {
+  background: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.4);
+  backdrop-filter: blur(8px); border-radius: 18px;
+}
+.pattern-bento .payment-list button { border-radius: 10px; }
+
+/* ================================================
+   CONFIRM — concept-specific structures
+   ================================================ */
+.confirm-table { display: grid; }
+.confirm-table > div {
+  display: grid; grid-template-columns: 80px 1fr; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.confirm-table > div:last-child { border-bottom: 0; }
+.confirm-table span { color: var(--muted); font-size: 13px; font-weight: 900; }
+.confirm-table strong { color: var(--text); font-weight: 900; }
+
+.glass-confirm-pass {
+  padding: 24px; border-radius: 22px;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.45);
+  display: grid; gap: 0;
+}
+.glass-confirm-row {
+  display: grid; grid-template-columns: 80px 1fr; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+.glass-confirm-row:last-child { border-bottom: 0; }
+.glass-confirm-row span { color: var(--muted); font-size: 13px; font-weight: 900; }
+.glass-confirm-row strong { color: var(--heading); font-weight: 900; }
+
+.bento-receipt-card {
+  background: rgba(255,255,255,0.95); border: 2px solid var(--border); border-radius: 10px;
+  padding: 20px; position: relative;
+}
+.bento-receipt-card::before {
+  content: ""; position: absolute; top: -1px; left: 20px; right: 20px;
+  height: 8px; background: repeating-linear-gradient(90deg, var(--bg) 0px, var(--bg) 6px, transparent 6px, transparent 12px);
+}
+.bento-receipt-items { display: grid; }
+.bento-receipt-items > div {
+  display: grid; grid-template-columns: 80px 1fr; gap: 12px;
+  padding: 10px 0; border-bottom: 2px dashed var(--border);
+}
+.bento-receipt-items > div:last-child { border-bottom: 0; }
+.bento-receipt-items span { color: var(--muted); font-size: 13px; font-weight: 900; }
+.bento-receipt-items strong { color: var(--heading); font-weight: 900; }
+
+/* ================================================
+   COMPLETE — 3 different celebrations
+   ================================================ */
+
+.neu-complete {
+  display: grid; justify-items: center; gap: 14px;
+  text-align: center; padding: 36px 20px;
+}
+.neu-complete-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--bg) 90%, white);
+  box-shadow: 8px 8px 20px rgba(163,177,198,0.4), -8px -8px 20px rgba(255,255,255,0.75);
+}
+.neu-complete-circle svg { color: var(--primary); }
+.neu-complete h1 {
+  margin: 0; color: var(--heading); font-size: clamp(22px,5vw,30px);
+  font-weight: 900; line-height: 1.2;
+}
+.neu-complete-sub { margin: 0; color: var(--muted); font-size: 14px; font-weight: 700; line-height: 1.7; max-width: 360px; }
+.neu-complete-ref {
+  display: grid; justify-items: center; gap: 4px;
+  padding: 16px 28px; border-radius: 20px;
+  background: color-mix(in srgb, var(--bg) 90%, white);
+  box-shadow: 4px 4px 10px rgba(163,177,198,0.3), -4px -4px 10px rgba(255,255,255,0.65);
+}
+.neu-complete-ref small { color: var(--muted); font-size: 11px; font-weight: 800; }
+.neu-complete-ref strong { color: var(--heading); font-size: 18px; font-weight: 900; }
+
+.glass-boarding-pass {
+  padding: 28px 24px;
+  background: rgba(255,255,255,0.4);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 24px;
+}
+.glass-pass-header {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--primary); font-size: 13px; font-weight: 900; margin-bottom: 12px;
+}
+.glass-pass-header svg { color: var(--primary); }
+.glass-boarding-pass h1 {
+  margin: 0 0 6px; color: var(--heading); font-size: clamp(22px,5vw,30px);
+  font-weight: 900; line-height: 1.2;
+}
+.glass-boarding-pass > p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 700; line-height: 1.7; }
+.glass-pass-divider {
+  height: 2px; margin: 16px 0;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.6) 0px, rgba(255,255,255,0.6) 8px, transparent 8px, transparent 16px);
+}
+.glass-pass-details { display: grid; gap: 0; }
+.glass-pass-details > div {
+  display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+}
+.glass-pass-details > div:last-child { border-bottom: 0; }
+.glass-pass-details span { color: var(--muted); font-size: 12px; font-weight: 900; }
+.glass-pass-details strong { color: var(--heading); font-weight: 900; }
+.glass-pass-barcode {
+  margin-top: 16px; padding: 14px; text-align: center;
+  background: rgba(255,255,255,0.3); border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.glass-pass-barcode span { font-size: 18px; font-weight: 900; color: var(--heading); letter-spacing: 0.1em; }
+
+.bento-receipt-complete { padding: 24px 20px; }
+.bento-receipt-header {
+  display: inline-block; padding: 4px 12px; border-radius: 4px;
+  background: var(--primary); color: #fff;
+  font-size: 12px; font-weight: 900; letter-spacing: 0.04em; margin-bottom: 10px;
+}
+.bento-receipt-complete h1 {
+  margin: 0 0 6px; color: var(--heading); font-size: clamp(20px,4.5vw,26px);
+  font-weight: 900; line-height: 1.2;
+}
+.bento-receipt-complete > p { margin: 0 0 16px; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.6; }
+.bento-receipt-stamp {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 16px; padding: 12px; border: 3px solid var(--secondary);
+  border-radius: 8px; color: var(--secondary);
+  transform: rotate(-3deg);
+}
+.bento-receipt-stamp svg { color: var(--secondary); }
+.bento-receipt-stamp span { font-size: 16px; font-weight: 900; letter-spacing: 0.15em; }
+.bento-receipt-ref {
+  margin-top: 12px; padding-top: 12px; border-top: 2px dashed var(--border);
+  text-align: center; color: var(--muted); font-size: 12px; font-weight: 800;
+}
+
+/* ================================================
+   Responsive: Desktop (720px+)
+   ================================================ */
+@media (min-width: 720px) {
+  .pattern-neumorphism .hero img { height: 380px; }
+  .pattern-bento .hero img { height: 280px; }
+
+  .glass-plan-card { flex: 0 0 320px; }
+  .glass-plan-card img { height: 240px; }
+  .glass-plan-card { grid-template-rows: 240px auto; }
+
+  .neu-benefits { gap: 16px; }
+  .bento-benefits { grid-template-columns: 1fr 1fr; }
+}
+
+/* ================================================
+   Responsive: Mobile (max 680px)
+   ================================================ */
+@media (max-width: 680px) {
+  .neu-benefits { flex-direction: column; align-items: stretch; }
+  .neu-benefit-chip { max-width: none; }
+
+  .bento-ticket-grid { grid-template-columns: 1fr; }
+  .bento-ticket { grid-template-rows: 140px auto; }
+  .bento-ticket img { height: 140px; }
+
+  .glass-plan-card { flex: 0 0 260px; }
+
+  .field-grid, .choice-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .pattern-glassmorphism .hero { min-height: 560px; }
+  .pattern-glassmorphism .hero-content { min-height: 560px; padding: 32px 16px; }
+
+  .bento-bottom-bar { padding: 10px 16px; }
+  .bento-bottom-bar .primary-action { min-width: 130px; }
+}
+
+/* ================================================
+   Responsive: Small Mobile (390px safe)
+   ================================================ */
+@media (max-width: 400px) {
+  .demo-header { padding: 6px 8px; gap: 4px; }
+  .demo-tab { padding: 0 10px; font-size: 11px; min-height: 32px; }
+
+  .pattern-glassmorphism .hero h1 { font-size: 24px; }
+
+  .primary-action, .back-action { min-height: 48px; font-size: 15px; }
+
+  .neu-plan-tile { border-radius: 22px; }
+  .neu-plan-photo { min-height: 150px; border-radius: 22px 0 0 22px; }
+  .neu-plan-text { padding: 14px 12px; }
+
+  .glass-plan-card { flex: 0 0 220px; }
+  .glass-plan-card img { height: 160px; }
+  .glass-plan-card { grid-template-rows: 160px auto; }
+
+  .bento-ticket img { height: 100px; }
+  .bento-ticket { grid-template-rows: 100px auto; }
+
+  .shell { padding: 14px; }
+  .choice-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .bento-bottom-bar { flex-direction: column; gap: 8px; }
+  .bento-bottom-bar .primary-action { width: 100%; min-width: auto; }
+
+  .step-item { padding: 4px 6px; font-size: 11px; }
+  .step-num { width: 20px; height: 20px; font-size: 10px; }
+
+  .carousel-arrow { width: 32px; height: 32px; }
+
+  .bento-benefits { grid-template-columns: 1fr; }
+  .bento-benefit-0 { grid-column: 1; }
+}
+
+/* ================================================
+   Reduced Motion
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

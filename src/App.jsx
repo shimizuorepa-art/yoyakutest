@@ -1,0 +1,858 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CalendarDays,
+  Check,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  Mail,
+  PartyPopper,
+  ShieldCheck,
+  Stamp,
+  UserRound,
+} from "lucide-react";
+import {
+  dateOptions,
+  patternFallback,
+  patterns,
+  paymentOptions,
+  plans,
+  timeOptions,
+} from "./demoData";
+
+const stepLabels = ["プラン", "日時", "情報", "支払", "確認", "完了"];
+const screenToStep = {
+  top: 0, plans: 1, reserve: 2,
+  account: 3, auth: 3, code: 3, password: 3, customer: 3, memo: 3,
+  payment: 4, confirm: 5, complete: 6,
+};
+
+const getInitial = (key, fallback) => {
+  const params = new URLSearchParams(window.location.search);
+  const value = params.get(key);
+  if (patterns[value]) return value;
+  if (patternFallback[value]) return patternFallback[value];
+  return fallback;
+};
+
+const Icon = ({ as: Component, size = 20 }) => (
+  <Component size={size} strokeWidth={2.4} />
+);
+
+function App() {
+  const [patternKey, setPatternKey] = useState(() =>
+    getInitial("pattern", "neumorphism")
+  );
+  const [screen, setScreen] = useState("top");
+  const [planId, setPlanId] = useState(null);
+  const [date, setDate] = useState(dateOptions[0]);
+  const [time, setTime] = useState("");
+  const [adult, setAdult] = useState(2);
+  const [child, setChild] = useState(0);
+  const [payment, setPayment] = useState("localPay");
+
+  const pattern = patterns[patternKey];
+  const copy = pattern.copy;
+  const selectedPlan = useMemo(
+    () => (planId ? plans.find((p) => p.id === planId) : null),
+    [planId]
+  );
+
+  const cssVars = {
+    "--bg": pattern.background, "--primary": pattern.primary,
+    "--secondary": pattern.secondary, "--gradient-from": pattern.gradientFrom,
+    "--gradient-to": pattern.gradientTo, "--heading": pattern.heading,
+    "--text": pattern.text, "--muted": pattern.muted,
+    "--border": pattern.border, "--surface": pattern.surface,
+    "--tint": pattern.tint, "--chip": pattern.chip,
+    "--chip-text": pattern.chipText, "--shadow": pattern.shadow,
+    "--bg-image": `url(${pattern.bgImage})`,
+  };
+
+  const updatePattern = (next) => {
+    setPatternKey(next);
+    window.history.replaceState(null, "", `?pattern=${next}`);
+  };
+
+  const resetDemo = () => {
+    setScreen("top");
+    setTime("");
+    setAdult(2);
+    setChild(0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const go = (next) => {
+    setScreen(next);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const pk = patternKey;
+
+  return (
+    <main className={`app pattern-${pk}`} style={cssVars}>
+      <DemoHeader patternKey={pk} onPattern={updatePattern} onReset={resetDemo} />
+
+      {screen === "top" ? (
+        <TopScreen hero={pattern.hero} pk={pk} onStart={() => go("plans")} />
+      ) : (
+        <>
+          <Stepper active={screenToStep[screen]} />
+          <div className="shell">
+            {screen === "plans" && (
+              <PlansScreen
+                selected={planId} onSelect={setPlanId}
+                onNext={() => go("reserve")} onBack={() => go("top")}
+                pk={pk} copy={copy} selectedPlan={selectedPlan}
+              />
+            )}
+            {screen === "reserve" && (
+              <ReserveScreen
+                date={date} time={time} adult={adult} child={child}
+                onDate={setDate} onTime={setTime} onAdult={setAdult} onChild={setChild}
+                onNext={() => go("account")} onBack={() => go("plans")}
+                pk={pk} copy={copy}
+              />
+            )}
+            {screen === "account" && (
+              <AccountScreen
+                onGuest={() => go("customer")} onMember={() => go("auth")}
+                onBack={() => go("reserve")} pk={pk} copy={copy}
+              />
+            )}
+            {screen === "auth" && <AuthScreen onNext={() => go("code")} onBack={() => go("account")} pk={pk} />}
+            {screen === "code" && <CodeScreen onNext={() => go("password")} onBack={() => go("auth")} pk={pk} />}
+            {screen === "password" && <PasswordScreen onNext={() => go("customer")} onBack={() => go("code")} pk={pk} />}
+            {screen === "customer" && <CustomerScreen onNext={() => go("memo")} onBack={() => go("account")} pk={pk} />}
+            {screen === "memo" && <MemoScreen onNext={() => go("payment")} onBack={() => go("customer")} pk={pk} copy={copy} />}
+            {screen === "payment" && (
+              <PaymentScreen
+                payment={payment} onPayment={setPayment}
+                onNext={() => go("confirm")} onBack={() => go("memo")}
+                pk={pk} copy={copy}
+              />
+            )}
+            {screen === "confirm" && (
+              <ConfirmScreen
+                plan={selectedPlan} date={date} time={time}
+                adult={adult} child={child} payment={payment}
+                onNext={() => go("complete")} onBack={() => go("payment")}
+                pk={pk} copy={copy}
+              />
+            )}
+            {screen === "complete" && (
+              <CompleteScreen
+                plan={selectedPlan} date={date} time={time}
+                adult={adult} child={child} onReset={resetDemo}
+                pk={pk} copy={copy}
+              />
+            )}
+          </div>
+        </>
+      )}
+    </main>
+  );
+}
+
+/* ================================================
+   Demo Header
+   ================================================ */
+function DemoHeader({ patternKey, onPattern, onReset }) {
+  return (
+    <header className="demo-header">
+      <div className="demo-tabs">
+        {Object.values(patterns).map((p) => (
+          <button
+            className={`demo-tab ${p.key === patternKey ? "is-active" : ""}`}
+            key={p.key}
+            onClick={() => onPattern(p.key)}
+          >
+            {p.name}
+          </button>
+        ))}
+      </div>
+      <button className="icon-button" aria-label="TOPへ戻る" onClick={onReset}>
+        <Home size={18} />
+      </button>
+    </header>
+  );
+}
+
+/* ================================================
+   Stepper — unified left-aligned number + label
+   ================================================ */
+function Stepper({ active }) {
+  return (
+    <nav className="unified-stepper" aria-label="予約ステップ">
+      {stepLabels.map((label, i) => {
+        const step = i + 1;
+        const isDone = step < active;
+        const isCurrent = step === active;
+        return (
+          <div
+            className={`step-item ${isDone ? "done" : ""} ${isCurrent ? "current" : ""}`}
+            key={i}
+          >
+            <span className="step-num">
+              {isDone ? <Check size={12} /> : step}
+            </span>
+            <span className="step-label">{label}</span>
+          </div>
+        );
+      })}
+    </nav>
+  );
+}
+
+/* ================================================
+   Section Header — 3 different structures
+   ================================================ */
+function SectionHeader({ eyebrow, title, icon, pk }) {
+  if (pk === "neumorphism") {
+    return (
+      <div className="neu-section">
+        <Icon as={icon} size={28} />
+        <h2>{title}</h2>
+      </div>
+    );
+  }
+
+  if (pk === "glassmorphism") {
+    return (
+      <div className="glass-section">
+        <div className="glass-section-badge">
+          <Icon as={icon} size={16} />
+          {eyebrow}
+        </div>
+        <h2>{title}</h2>
+      </div>
+    );
+  }
+
+  // bento
+  return (
+    <div className="bento-banner">
+      <div className="bento-banner-badge">
+        <Icon as={icon} size={14} />
+        {eyebrow}
+      </div>
+      <h2>{title}</h2>
+    </div>
+  );
+}
+
+/* ================================================
+   TOP Screen — concept-specific benefits
+   ================================================ */
+function TopScreen({ hero, pk, onStart }) {
+  return (
+    <>
+      <section className="hero">
+        <img src={hero.image} alt="" />
+        {pk === "glassmorphism" && <div className="hero-shade" />}
+        <div className="hero-content">
+          <p className="eyebrow">{hero.eyebrow}</p>
+          <h1>{hero.headline}</h1>
+          <p>{hero.lead}</p>
+          <div className="hero-actions">
+            <button className="primary-action" onClick={onStart}>
+              {hero.cta}
+              <ArrowRight size={20} />
+            </button>
+          </div>
+        </div>
+      </section>
+      <BenefitsSection benefits={hero.benefits} pk={pk} />
+    </>
+  );
+}
+
+/* ================================================
+   Benefits — 3 completely different structures
+   ================================================ */
+function BenefitsSection({ benefits, pk }) {
+  if (pk === "neumorphism") {
+    // Soft floating chip cloud on sky bg
+    return (
+      <section className="neu-benefits">
+        {benefits.map(([title, text, icon]) => (
+          <div className="neu-benefit-chip" key={title}>
+            <Icon as={icon} size={18} />
+            <div>
+              <strong>{title}</strong>
+              <p>{text}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+    );
+  }
+
+  if (pk === "glassmorphism") {
+    // Single glass panel with keyword list
+    return (
+      <section className="glass-benefits">
+        <div className="glass-benefit-panel">
+          {benefits.map(([title, text, icon]) => (
+            <div className="glass-benefit-row" key={title}>
+              <Icon as={icon} size={18} />
+              <div>
+                <strong>{title}</strong>
+                <span>{text}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  // bento — unequal bento grid
+  return (
+    <section className="bento-benefits">
+      {benefits.map(([title, text, icon], i) => (
+        <div className={`bento-benefit-block bento-benefit-${i}`} key={title}>
+          <Icon as={icon} size={20} />
+          <strong>{title}</strong>
+          <p>{text}</p>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+/* ================================================
+   Plans Screen — 3 different layouts
+   ================================================ */
+function PlanCardContent({ plan, selected, onSelect }) {
+  const isSelected = selected === plan.id;
+  return (
+    <>
+      <strong>{plan.title}</strong>
+      <p className="plan-pr">{plan.pr}</p>
+      <div className="plan-times">
+        {timeOptions.map((t) => (
+          <span key={t}>{t}</span>
+        ))}
+      </div>
+      <div className="plan-actions">
+        <button className="plan-detail-btn" type="button" onClick={(e) => e.stopPropagation()}>詳細</button>
+        <button
+          className={`plan-select-btn ${isSelected ? "is-selected" : ""}`}
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onSelect(plan.id); }}
+        >
+          {isSelected ? "選択中" : "選択"}
+        </button>
+      </div>
+    </>
+  );
+}
+
+function PlansScreen({ selected, onSelect, onNext, onBack, pk, copy, selectedPlan }) {
+  const planCards = () => {
+    if (pk === "neumorphism") {
+      return (
+        <div className="neu-plan-list">
+          {plans.map((plan) => (
+            <div className={`neu-plan-tile ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+              <div className="neu-plan-photo">
+                <img src={plan.image} alt="" />
+              </div>
+              <div className="neu-plan-text">
+                <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (pk === "glassmorphism") {
+      return <GlassCarousel selected={selected} onSelect={onSelect} />;
+    }
+    // bento
+    return (
+      <div className="bento-ticket-grid">
+        {plans.map((plan) => (
+          <div className={`bento-ticket ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+            <img src={plan.image} alt="" />
+            <div className="bento-ticket-body">
+              <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <SectionHeader eyebrow={copy.planEyebrow} title={copy.planTitle} icon={PartyPopper} pk={pk} />
+      {planCards()}
+      <button className="back-action" onClick={onBack}>
+        <ArrowLeft size={18} /> TOPへもどる
+      </button>
+      {selected && (
+        <div className={`plan-fixed-cta plan-fixed-cta-${pk}`}>
+          <div className="plan-fixed-info">
+            <small>選択中</small>
+            <strong>{selectedPlan?.title}</strong>
+          </div>
+          <button className="primary-action" onClick={onNext}>
+            {copy.planCta} <ArrowRight size={18} />
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ================================================
+   Glass Carousel — with slide hint arrows + dots
+   ================================================ */
+function GlassCarousel({ selected, onSelect }) {
+  const scrollRef = useRef(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(true);
+
+  const updateArrows = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 8);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateArrows();
+    el.addEventListener("scroll", updateArrows, { passive: true });
+    return () => el.removeEventListener("scroll", updateArrows);
+  }, []);
+
+  const scroll = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 280, behavior: "smooth" });
+  };
+
+  return (
+    <div className="glass-carousel-wrap">
+      {canLeft && (
+        <button className="carousel-arrow carousel-arrow-left" onClick={() => scroll(-1)} aria-label="前へ">
+          <ChevronLeft size={22} />
+        </button>
+      )}
+      <div className="glass-plan-carousel" ref={scrollRef}>
+        {plans.map((plan) => (
+          <div className={`glass-plan-card ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+            <img src={plan.image} alt="" />
+            <div className="glass-plan-info">
+              <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+            </div>
+          </div>
+        ))}
+      </div>
+      {canRight && (
+        <button className="carousel-arrow carousel-arrow-right" onClick={() => scroll(1)} aria-label="次へ">
+          <ChevronRight size={22} />
+        </button>
+      )}
+      <div className="carousel-dots">
+        {plans.map((plan) => (
+          <span className={`carousel-dot ${selected === plan.id ? "active" : ""}`} key={plan.id} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ================================================
+   Reserve Screen
+   ================================================ */
+function ReserveScreen({ date, time, adult, child, onDate, onTime, onAdult, onChild, onNext, onBack, pk, copy }) {
+  const content = (
+    <>
+      <ChoicePanel title="ご予約日" options={dateOptions} value={date} onChange={onDate} pk={pk} />
+      <ChoicePanel title="来園時間" options={timeOptions} value={time} onChange={onTime} pk={pk} />
+      <section className="panel">
+        <h2>人数</h2>
+        <Counter label="大人" value={adult} onChange={onAdult} min={1} />
+        <Counter label="小人" value={child} onChange={onChild} min={0} />
+      </section>
+    </>
+  );
+
+  if (pk === "glassmorphism") {
+    return (
+      <>
+        <SectionHeader eyebrow={copy.dateEyebrow} title={copy.dateTitle} icon={CalendarDays} pk={pk} />
+        {content}
+        <div className="glass-cta-sheet">
+          <button className="primary-action" disabled={!time} onClick={onNext}>
+            {copy.dateCta} <ArrowRight size={18} />
+          </button>
+          <button className="back-action" onClick={onBack}>
+            <ArrowLeft size={18} /> もどる
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <SectionHeader eyebrow={copy.dateEyebrow} title={copy.dateTitle} icon={CalendarDays} pk={pk} />
+      {content}
+      {pk === "bento" ? (
+        <>
+          <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
+          <div className="bento-bottom-bar">
+            <div className="bento-bar-info"><small>次のステップ</small><strong>予約者情報</strong></div>
+            <button className="primary-action" disabled={!time} onClick={onNext}>
+              {copy.dateCta} <ArrowRight size={18} />
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="neu-big-cta">
+          <button className="primary-action" disabled={!time} onClick={onNext}>
+            {copy.dateCta} <ArrowRight size={18} />
+          </button>
+          <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
+        </div>
+      )}
+    </>
+  );
+}
+
+function ChoicePanel({ title, options, value, onChange, pk }) {
+  return (
+    <section className="panel">
+      <h2>{title}</h2>
+      <div className="choice-grid">
+        {options.map((option) => (
+          <button className={value === option ? "is-active" : ""} key={option} onClick={() => onChange(option)}>
+            {option}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Counter({ label, value, onChange, min }) {
+  return (
+    <div className="counter-row">
+      <strong>{label}</strong>
+      <div>
+        <button onClick={() => onChange(Math.max(min, value - 1))}>-</button>
+        <span>{value}</span>
+        <button onClick={() => onChange(value + 1)}>+</button>
+      </div>
+    </div>
+  );
+}
+
+/* ================================================
+   Account Screen
+   ================================================ */
+function AccountScreen({ onGuest, onMember, onBack, pk, copy }) {
+  return (
+    <>
+      <SectionHeader eyebrow={copy.accountEyebrow} title={copy.accountTitle} icon={UserRound} pk={pk} />
+      <section className="panel">
+        <button className="wide-choice" onClick={onGuest}>
+          会員登録せず予約へ進む <ChevronRight />
+        </button>
+        <button className="wide-choice secondary" onClick={onMember}>
+          メールで会員登録して進む <Mail />
+        </button>
+      </section>
+      <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
+    </>
+  );
+}
+
+/* ================================================
+   Form Screens
+   ================================================ */
+function AuthScreen({ onNext, onBack, pk }) {
+  return <SimpleForm eyebrow="メールで確認" title="メールアドレス" button="認証コードを受け取る" onNext={onNext} onBack={onBack} pk={pk} fields={["メールアドレス"]} />;
+}
+function CodeScreen({ onNext, onBack, pk }) {
+  return <SimpleForm eyebrow="届いた番号を入力" title="認証コード" button="次へ" onNext={onNext} onBack={onBack} pk={pk} fields={["6桁の認証コード", "メールアドレス"]} />;
+}
+function PasswordScreen({ onNext, onBack, pk }) {
+  return <SimpleForm eyebrow="次回をスムーズに" title="パスワード設定" button="お客様情報へ" onNext={onNext} onBack={onBack} pk={pk} fields={["パスワード", "確認用パスワード"]} />;
+}
+function CustomerScreen({ onNext, onBack, pk }) {
+  return <SimpleForm eyebrow="当日のご案内用" title="お客様情報" button="来園メモへ" onNext={onNext} onBack={onBack} pk={pk} fields={["姓", "名", "セイ", "メイ", "電話番号", "メールアドレス"]} />;
+}
+
+function MemoScreen({ onNext, onBack, pk, copy }) {
+  return (
+    <>
+      <SectionHeader eyebrow={copy.memoEyebrow} title={copy.memoTitle} icon={ShieldCheck} pk={pk} />
+      <section className="panel">
+        <label className="field full">
+          <span>連絡事項</span>
+          <textarea defaultValue="小さな子ども連れです。入口に近い案内だと助かります。" />
+        </label>
+      </section>
+      <CtaBlock pk={pk} onNext={onNext} onBack={onBack} nextLabel="お支払いへ" />
+    </>
+  );
+}
+
+/* ================================================
+   Payment Screen
+   ================================================ */
+function PaymentScreen({ payment, onPayment, onNext, onBack, pk, copy }) {
+  return (
+    <>
+      <SectionHeader eyebrow={copy.paymentEyebrow} title={copy.paymentTitle} icon={ShieldCheck} pk={pk} />
+      <section className="panel">
+        <div className="payment-list">
+          {paymentOptions.map(([key, title, text, icon]) => (
+            <button
+              className={payment === key ? "is-selected" : ""}
+              key={key} onClick={() => onPayment(key)}
+            >
+              <Icon as={icon} />
+              <span><strong>{title}</strong><small>{text}</small></span>
+              {payment === key && <CheckCircle2 />}
+            </button>
+          ))}
+        </div>
+      </section>
+      <CtaBlock pk={pk} onNext={onNext} onBack={onBack} nextLabel={copy.paymentCta} />
+    </>
+  );
+}
+
+/* ================================================
+   Confirm Screen
+   ================================================ */
+function ConfirmScreen({ plan, date, time, adult, child, payment, onNext, onBack, pk, copy }) {
+  const rows = [
+    ["施設", "蒲郡オレンジパーク"],
+    ["体験", plan.title],
+    ["日時", `${date} ${time}`],
+    ["人数", `大人${adult}名${child ? ` / 小人${child}名` : ""}`],
+    ["支払い", payment === "credit" ? "クレジットカード" : "当日現地払い"],
+  ];
+
+  if (pk === "glassmorphism") {
+    return (
+      <>
+        <SectionHeader eyebrow={copy.confirmEyebrow} title={copy.confirmTitle} icon={CheckCircle2} pk={pk} />
+        <div className="glass-confirm-pass">
+          {rows.map(([label, value]) => (
+            <div key={label} className="glass-confirm-row">
+              <span>{label}</span><strong>{value}</strong>
+            </div>
+          ))}
+        </div>
+        <div className="glass-cta-sheet">
+          <button className="primary-action" onClick={onNext}>{copy.confirmCta} <ArrowRight size={18} /></button>
+          <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
+        </div>
+      </>
+    );
+  }
+
+  if (pk === "bento") {
+    return (
+      <>
+        <SectionHeader eyebrow={copy.confirmEyebrow} title={copy.confirmTitle} icon={CheckCircle2} pk={pk} />
+        <div className="bento-receipt-card">
+          <div className="bento-receipt-items">
+            {rows.map(([label, value]) => (
+              <div key={label}><span>{label}</span><strong>{value}</strong></div>
+            ))}
+          </div>
+        </div>
+        <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
+        <div className="bento-bottom-bar">
+          <div className="bento-bar-info"><small>確認済み</small><strong>{plan.title}</strong></div>
+          <button className="primary-action" onClick={onNext}>{copy.confirmCta} <ArrowRight size={18} /></button>
+        </div>
+      </>
+    );
+  }
+
+  // neumorphism
+  return (
+    <>
+      <SectionHeader eyebrow={copy.confirmEyebrow} title={copy.confirmTitle} icon={CheckCircle2} pk={pk} />
+      <section className="panel">
+        <div className="confirm-table">
+          {rows.map(([label, value]) => (
+            <div key={label}><span>{label}</span><strong>{value}</strong></div>
+          ))}
+        </div>
+      </section>
+      <div className="neu-big-cta">
+        <button className="primary-action" onClick={onNext}>{copy.confirmCta} <ArrowRight size={18} /></button>
+        <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
+      </div>
+    </>
+  );
+}
+
+/* ================================================
+   Complete Screen — 3 different celebrations
+   ================================================ */
+function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
+  const info = [
+    ["施設", "蒲郡オレンジパーク"],
+    ["体験", plan.title],
+    ["日時", `${date} ${time}`],
+    ["人数", `大人${adult}名${child ? ` / 小人${child}名` : ""}`],
+  ];
+
+  if (pk === "neumorphism") {
+    return (
+      <>
+        <div className="neu-complete">
+          <div className="neu-complete-circle">
+            <CheckCircle2 size={56} />
+          </div>
+          <h1>{copy.completeLine1}</h1>
+          <p className="neu-complete-sub">{copy.completeLine2}</p>
+          <div className="neu-complete-ref">
+            <small>予約番号</small>
+            <strong>OREPA-0523</strong>
+          </div>
+        </div>
+        <section className="panel">
+          <div className="confirm-table">
+            {info.map(([l, v]) => <div key={l}><span>{l}</span><strong>{v}</strong></div>)}
+          </div>
+        </section>
+        <div className="neu-big-cta">
+          <button className="primary-action" onClick={onReset}>TOPへ戻る <Home size={18} /></button>
+        </div>
+      </>
+    );
+  }
+
+  if (pk === "glassmorphism") {
+    return (
+      <>
+        <div className="glass-boarding-pass">
+          <div className="glass-pass-header">
+            <PartyPopper size={20} />
+            <span>予約確定</span>
+          </div>
+          <h1>{copy.completeLine1}</h1>
+          <p>{copy.completeLine2}</p>
+          <div className="glass-pass-divider" />
+          <div className="glass-pass-details">
+            {info.map(([l, v]) => <div key={l}><span>{l}</span><strong>{v}</strong></div>)}
+          </div>
+          <div className="glass-pass-barcode">
+            <span>OREPA-0523</span>
+          </div>
+        </div>
+        <div className="glass-cta-sheet">
+          <button className="primary-action" onClick={onReset}>TOPへ戻る <Home size={18} /></button>
+        </div>
+      </>
+    );
+  }
+
+  // bento
+  return (
+    <>
+      <div className="bento-receipt-card bento-receipt-complete">
+        <div className="bento-receipt-header">予約完了</div>
+        <h1>{copy.completeLine1}</h1>
+        <p>{copy.completeLine2}</p>
+        <div className="bento-receipt-items">
+          {info.map(([l, v]) => <div key={l}><span>{l}</span><strong>{v}</strong></div>)}
+        </div>
+        <div className="bento-receipt-stamp">
+          <Stamp size={28} />
+          <span>CONFIRMED</span>
+        </div>
+        <div className="bento-receipt-ref">予約番号: OREPA-0523</div>
+      </div>
+      <div className="bento-bottom-bar">
+        <div className="bento-bar-info"><small>予約完了</small><strong>蒲郡オレンジパーク</strong></div>
+        <button className="primary-action" onClick={onReset}>TOPへ戻る <Home size={18} /></button>
+      </div>
+    </>
+  );
+}
+
+/* ================================================
+   Shared Helpers
+   ================================================ */
+function SimpleForm({ eyebrow, title, button, fields, onNext, onBack, pk }) {
+  return (
+    <>
+      <SectionHeader eyebrow={eyebrow} title={title} icon={Mail} pk={pk} />
+      <section className="panel">
+        <div className="field-grid">
+          {fields.map((field) => (
+            <label className="field" key={field}>
+              <span>{field}</span>
+              <input defaultValue={sampleValue(field)} type={field.includes("パスワード") ? "password" : "text"} />
+            </label>
+          ))}
+        </div>
+      </section>
+      <CtaBlock pk={pk} onNext={onNext} onBack={onBack} nextLabel={button} />
+    </>
+  );
+}
+
+function CtaBlock({ pk, onNext, onBack, nextLabel = "次へ", disabled = false }) {
+  if (pk === "glassmorphism") {
+    return (
+      <div className="glass-cta-sheet">
+        {onNext && <button className="primary-action" disabled={disabled} onClick={onNext}>{nextLabel} <ArrowRight size={18} /></button>}
+        {onBack && <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>}
+      </div>
+    );
+  }
+  if (pk === "bento") {
+    return (
+      <>
+        {onBack && <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>}
+        {onNext && (
+          <div className="bento-bottom-bar">
+            <div />
+            <button className="primary-action" disabled={disabled} onClick={onNext}>{nextLabel} <ArrowRight size={18} /></button>
+          </div>
+        )}
+      </>
+    );
+  }
+  // neumorphism
+  return (
+    <div className="neu-big-cta">
+      {onNext && <button className="primary-action" disabled={disabled} onClick={onNext}>{nextLabel} <ArrowRight size={18} /></button>}
+      {onBack && <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>}
+    </div>
+  );
+}
+
+function sampleValue(label) {
+  if (label.includes("メール")) return "fruit-trip@example.com";
+  if (label.includes("電話")) return "09012345678";
+  if (label.includes("コード")) return "123456";
+  if (label.includes("パスワード")) return "fruitpark2026";
+  if (label === "姓") return "山田";
+  if (label === "名") return "花子";
+  if (label === "セイ") return "ヤマダ";
+  if (label === "メイ") return "ハナコ";
+  return "";
+}
+
+export default App;
