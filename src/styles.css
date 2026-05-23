@@ -513,10 +513,15 @@ button { cursor: pointer; }
 .neu-plan-tile p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.6; }
 
 /* --- Glassmorphism: Horizontal scroll photo-dominant cards --- */
-.glass-carousel-wrap { position: relative; }
+.glass-carousel-wrap {
+  position: relative;
+  min-width: 0;
+}
 .glass-plan-carousel {
-  display: flex; gap: 16px; overflow-x: auto;
+  display: flex; gap: 16px; width: 100%; max-width: 100%; min-width: 0; overflow-x: auto;
   padding: 4px 0 16px; scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 .glass-plan-carousel::-webkit-scrollbar { display: none; }
