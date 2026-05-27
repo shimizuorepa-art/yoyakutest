@@ -6,8 +6,8 @@
 
 - TOP / plan selection / reservation flow concepts:
   - `bento`: 旬のベントー
-  - `craft`: CRAFT HARVEST
-  - `studio`: ARCHETYPE
+  - `craft`: 収穫手帖
+  - `studio`: 果樹園ギャラリー
   - `puerto`: Puerto Reservation
 - Full happy path:
   `TOP -> プラン選択 -> 日時・人数 -> お客様情報 -> 来園メモ -> 支払い -> 確認 -> 完了`
@@ -47,6 +47,15 @@ This repository is ready for Vercel Git integration.
 - Output directory: `dist`
 
 `vercel.json` includes SPA rewrites so direct URLs continue to load the demo app.
+
+## Design System Notes
+
+The four active review concepts are registered as reusable design-system references in command-center:
+
+- `bento`: Seasonal Bento
+- `craft`: Craft Harvest
+- `studio`: Orchard Gallery Studio
+- `puerto`: Puerto Reservation
 
 ## Notes
 
