@@ -237,6 +237,20 @@ function SectionHeader({ eyebrow, title, icon, pk }) {
     );
   }
 
+  if (pk === "puerto") {
+    return (
+      <div className="puerto-section">
+        <div>
+          <p>{eyebrow}</p>
+          <h2>{title}</h2>
+        </div>
+        <span className="puerto-section-icon">
+          <Icon as={icon} size={20} />
+        </span>
+      </div>
+    );
+  }
+
   if (pk === "glassmorphism") {
     return (
       <div className="glass-section">
@@ -324,6 +338,20 @@ function BenefitsSection({ benefits, pk }) {
     );
   }
 
+  if (pk === "puerto") {
+    return (
+      <section className="puerto-benefits">
+        {benefits.map(([title, text, icon]) => (
+          <div className="puerto-benefit-card" key={title}>
+            <Icon as={icon} size={18} />
+            <strong>{title}</strong>
+            <p>{text}</p>
+          </div>
+        ))}
+      </section>
+    );
+  }
+
   // bento — unequal bento grid
   return (
     <section className="bento-benefits">
@@ -395,6 +423,23 @@ function PlansScreen({ selected, onSelect, onNext, onBack, pk, copy, selectedPla
               <span className="studio-plan-index">{String(i + 1).padStart(2, "0")}</span>
               <img src={plan.image} alt="" />
               <div className="studio-plan-copy">
+                <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (pk === "puerto") {
+      return (
+        <div className="puerto-plan-grid">
+          {plans.map((plan, i) => (
+            <div className={`puerto-plan-card ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+              <div className={`puerto-plan-image puerto-plan-image-${i + 1}`}>
+                <img src={plan.image} alt="" />
+                <span>{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <div className="puerto-plan-body">
                 <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
               </div>
             </div>
@@ -536,7 +581,7 @@ function ReserveScreen({ date, time, adult, child, onDate, onTime, onAdult, onCh
     <>
       <SectionHeader eyebrow={copy.dateEyebrow} title={copy.dateTitle} icon={CalendarDays} pk={pk} />
       {content}
-      {pk === "bento" || pk === "craft" || pk === "studio" ? (
+      {pk === "bento" || pk === "craft" || pk === "studio" || pk === "puerto" ? (
         <>
           <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
           <div className="bento-bottom-bar">
@@ -694,7 +739,7 @@ function ConfirmScreen({ plan, date, time, adult, child, payment, onNext, onBack
     );
   }
 
-  if (pk === "bento" || pk === "craft" || pk === "studio") {
+  if (pk === "bento" || pk === "craft" || pk === "studio" || pk === "puerto") {
     return (
       <>
         <SectionHeader eyebrow={copy.confirmEyebrow} title={copy.confirmTitle} icon={CheckCircle2} pk={pk} />
@@ -795,7 +840,7 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
     );
   }
 
-  // bento / craft / studio
+  // bento / craft / studio / puerto
   return (
     <>
       <div className="bento-receipt-card bento-receipt-complete">
@@ -850,7 +895,7 @@ function CtaBlock({ pk, onNext, onBack, nextLabel = "次へ", disabled = false }
       </div>
     );
   }
-  if (pk === "bento" || pk === "craft" || pk === "studio") {
+  if (pk === "bento" || pk === "craft" || pk === "studio" || pk === "puerto") {
     return (
       <>
         {onBack && <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>}

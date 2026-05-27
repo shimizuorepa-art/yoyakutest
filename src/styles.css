@@ -66,6 +66,13 @@ button { cursor: pointer; }
   background-size: 56px 56px;
   background-attachment: fixed;
 }
+.pattern-puerto.app {
+  background-color: #f8fafc;
+  background-image:
+    linear-gradient(180deg, rgba(10, 37, 64, 0.04), transparent 360px),
+    radial-gradient(circle at 88% 5%, rgba(0, 212, 178, 0.13), transparent 320px);
+  background-attachment: fixed;
+}
 
 /* ================================================
    DEMO HEADER — shared base
@@ -157,6 +164,29 @@ button { cursor: pointer; }
 .pattern-studio .icon-button {
   border-radius: 0;
   background: #f2f1ec;
+}
+.pattern-puerto .demo-header {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+}
+.pattern-puerto .demo-tab {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #475569;
+  font-weight: 700;
+}
+.pattern-puerto .demo-tab.is-active {
+  background: #0a2540;
+  border-color: #0a2540;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(10, 37, 64, 0.08);
+}
+.pattern-puerto .icon-button {
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #0a2540;
 }
 
 /* ================================================
@@ -257,6 +287,34 @@ button { cursor: pointer; }
 .pattern-studio .step-item.current .step-num {
   background: #111;
   color: #fff;
+}
+.pattern-puerto .unified-stepper {
+  top: 53px;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+}
+.pattern-puerto .step-item {
+  border-radius: 6px;
+  color: #64748b;
+  font-weight: 700;
+}
+.pattern-puerto .step-num {
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+}
+.pattern-puerto .step-item.current {
+  background: #e6f7f4;
+  color: #0a2540;
+}
+.pattern-puerto .step-item.current .step-num {
+  background: #0a2540;
+  color: #fff;
+}
+.pattern-puerto .step-item.done .step-num {
+  background: #00d4b2;
+  color: #0a2540;
 }
 
 /* ================================================
@@ -453,6 +511,85 @@ button { cursor: pointer; }
   box-shadow: none;
 }
 
+/* --- Puerto Platform Hero --- */
+.pattern-puerto .hero {
+  width: min(100%, 1180px);
+  min-height: auto;
+  margin: 0 auto;
+  padding: 28px 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 24px;
+  align-items: stretch;
+}
+.pattern-puerto .hero img {
+  position: relative;
+  grid-column: 2;
+  width: 100%;
+  min-height: 420px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+}
+.pattern-puerto .hero-content {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  min-height: 420px;
+  padding: 34px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+}
+.pattern-puerto .hero-content::before {
+  content: "";
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 30%, transparent 5px, #00d4b2 5px, #00d4b2 7px, transparent 7px),
+    linear-gradient(#00d4b2, #00d4b2) center 50% / 4px 24px no-repeat,
+    linear-gradient(#00d4b2, #00d4b2) center 54% / 24px 4px no-repeat,
+    #0a2540;
+}
+.pattern-puerto .eyebrow {
+  justify-self: start;
+  border-radius: 6px;
+  background: #e6f7f4;
+  color: #0a6f60;
+  font-size: 12px;
+  font-weight: 700;
+}
+.pattern-puerto .hero h1 {
+  margin: 0;
+  color: #0a2540;
+  font-size: clamp(30px, 5.4vw, 56px);
+  font-weight: 800;
+  line-height: 1.08;
+}
+.pattern-puerto .hero p:not(.eyebrow) {
+  margin: 0;
+  max-width: 540px;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.pattern-puerto .hero .primary-action {
+  width: fit-content;
+  min-width: 260px;
+  min-height: 48px;
+  border-radius: 6px;
+  background: #0a2540;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(10, 37, 64, 0.08);
+}
+
 /* ================================================
    BENEFITS — 3 completely different structures
    ================================================ */
@@ -582,6 +719,27 @@ button { cursor: pointer; }
 .studio-benefit-row strong { color: #111; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
 .studio-benefit-row p { margin: 0; color: #72716b; font-size: 13px; line-height: 1.8; }
 
+.puerto-benefits {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: 24px 20px 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.puerto-benefit-card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+}
+.puerto-benefit-card svg { color: #00a98f; }
+.puerto-benefit-card strong { color: #0a2540; font-size: 15px; font-weight: 800; }
+.puerto-benefit-card p { margin: 0; color: #475569; font-size: 13px; line-height: 1.6; }
+
 /* ================================================
    SHELL
    ================================================ */
@@ -706,6 +864,41 @@ button { cursor: pointer; }
   line-height: 1.04;
 }
 .studio-section svg { color: #b28e46; }
+.puerto-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+}
+.puerto-section p {
+  margin: 0 0 4px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.puerto-section h2 {
+  margin: 0;
+  color: #0a2540;
+  font-size: clamp(22px, 4.2vw, 32px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+.puerto-section-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #e6f7f4;
+  color: #0a2540;
+  flex-shrink: 0;
+}
 
 /* ================================================
    BUTTONS — concept-aware
@@ -783,6 +976,36 @@ button { cursor: pointer; }
   background: #111;
   color: #fff;
   border-color: #111;
+}
+.pattern-puerto .primary-action,
+.pattern-puerto .back-action,
+.pattern-puerto .wide-choice {
+  border-radius: 6px;
+  min-height: 48px;
+  box-shadow: 0 2px 4px rgba(10, 37, 64, 0.08);
+  font-weight: 700;
+}
+.pattern-puerto .primary-action { background: #0a2540; color: #fff; }
+.pattern-puerto .primary-action:hover:not(:disabled) {
+  background: #12375c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(10, 37, 64, 0.16);
+}
+.pattern-puerto .back-action {
+  background: #fff;
+  color: #0a2540;
+  border: 1px solid #e2e8f0;
+  box-shadow: none;
+}
+.pattern-puerto .wide-choice {
+  background: #fff;
+  color: #0a2540;
+  border: 1px solid #e2e8f0;
+}
+.pattern-puerto .wide-choice.secondary {
+  background: #0a2540;
+  color: #fff;
+  border-color: #0a2540;
 }
 
 /* ================================================
@@ -876,6 +1099,16 @@ button { cursor: pointer; }
   font-family: Georgia, serif;
   font-weight: 500;
 }
+.plan-fixed-cta-puerto,
+.pattern-puerto .bento-bottom-bar {
+  background: rgba(255, 255, 255, 0.92);
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -8px 16px rgba(15, 23, 42, 0.08);
+}
+.pattern-puerto .bento-bar-info small,
+.pattern-puerto .plan-fixed-info small { color: #64748b; }
+.pattern-puerto .bento-bar-info strong,
+.pattern-puerto .plan-fixed-info strong { color: #0a2540; }
 
 /* ================================================
    PANEL — concept-aware
@@ -923,6 +1156,17 @@ button { cursor: pointer; }
   font-family: Georgia, serif;
   font-size: 20px;
   font-weight: 500;
+}
+.pattern-puerto .panel {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+}
+.pattern-puerto .panel h2 {
+  color: #0a2540;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 /* ================================================
@@ -1057,6 +1301,63 @@ button { cursor: pointer; }
   color: #72716b;
   line-height: 1.7;
 }
+
+/* --- Puerto: product cards with status-safe actions --- */
+.puerto-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.puerto-plan-card {
+  display: grid;
+  grid-template-rows: 180px auto;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.puerto-plan-card:hover {
+  transform: translateY(-2px);
+  border-color: #00d4b2;
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.05);
+}
+.puerto-plan-card.is-selected {
+  border-color: #00d4b2;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+}
+.puerto-plan-image {
+  position: relative;
+  background: #2a4868;
+  overflow: hidden;
+}
+.puerto-plan-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  mix-blend-mode: soft-light;
+  opacity: 0.64;
+}
+.puerto-plan-image span {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  color: rgba(255, 255, 255, 0.18);
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1;
+}
+.puerto-plan-image-2 { background: #c24a35; }
+.puerto-plan-image-3 { background: #4f6b3a; }
+.puerto-plan-body {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+}
+.puerto-plan-body strong { color: #0a2540; font-size: 17px; font-weight: 800; }
+.puerto-plan-body p { color: #475569; }
 
 /* --- Glassmorphism: Horizontal scroll photo-dominant cards --- */
 .glass-carousel-wrap {
@@ -1226,6 +1527,30 @@ button { cursor: pointer; }
   border-color: #111;
   color: #fff;
 }
+.pattern-puerto .plan-times span {
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+}
+.pattern-puerto .plan-detail-btn,
+.pattern-puerto .plan-select-btn {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0a2540;
+  font-weight: 700;
+}
+.pattern-puerto .plan-select-btn {
+  background: #e6f7f4;
+  border-color: #e6f7f4;
+  color: #0a6f60;
+}
+.pattern-puerto .plan-select-btn.is-selected {
+  background: #00d4b2;
+  border-color: #00d4b2;
+  color: #0a2540;
+}
 
 /* ================================================
    CHOICE GRID & COUNTER
@@ -1279,6 +1604,19 @@ button { cursor: pointer; }
   color: #fff;
   box-shadow: none;
 }
+.pattern-puerto .choice-grid button {
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #0a2540;
+  font-weight: 700;
+}
+.pattern-puerto .choice-grid button.is-active {
+  border-color: #00d4b2;
+  background: #e6f7f4;
+  color: #0a2540;
+  box-shadow: none;
+}
 
 .counter-row { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 8px 0; }
 .counter-row strong { font-weight: 900; }
@@ -1302,6 +1640,11 @@ button { cursor: pointer; }
   border-radius: 0;
   background: #f2f1ec;
   color: #111;
+}
+.pattern-puerto .counter-row button {
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #0a2540;
 }
 
 /* ================================================
@@ -1360,6 +1703,18 @@ button { cursor: pointer; }
   background: #fff;
   color: #111;
 }
+.pattern-puerto .field span {
+  color: #475569;
+  font-weight: 700;
+}
+.pattern-puerto .field input,
+.pattern-puerto .field textarea {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 500;
+}
 
 /* ================================================
    PAYMENT
@@ -1406,6 +1761,15 @@ button { cursor: pointer; }
 .pattern-studio .payment-list button.is-selected {
   border-color: #111;
   background: #f6f2e8;
+}
+.pattern-puerto .payment-list button {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+.pattern-puerto .payment-list button.is-selected {
+  border-color: #00d4b2;
+  background: #e6f7f4;
 }
 
 /* ================================================
@@ -1485,6 +1849,33 @@ button { cursor: pointer; }
   font-family: Georgia, serif;
   font-weight: 500;
 }
+.pattern-puerto .bento-receipt-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
+}
+.pattern-puerto .bento-receipt-card::before {
+  background: #00d4b2;
+  height: 4px;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.pattern-puerto .bento-receipt-items > div {
+  border-bottom: 1px solid #e2e8f0;
+}
+.pattern-puerto .bento-receipt-header {
+  border-radius: 4px;
+  background: #0a2540;
+}
+.pattern-puerto .bento-receipt-stamp {
+  border-color: #00d4b2;
+  color: #0a6f60;
+  border-radius: 8px;
+  transform: none;
+}
+.pattern-puerto .bento-receipt-stamp svg { color: #00a98f; }
 
 /* ================================================
    COMPLETE — 3 different celebrations
@@ -1589,6 +1980,7 @@ button { cursor: pointer; }
   .neu-benefits { gap: 16px; }
   .bento-benefits { grid-template-columns: 1fr 1fr; }
   .pattern-studio .shell { width: min(100%, 1180px); }
+  .pattern-puerto .shell { width: min(100%, 1180px); }
 }
 
 /* ================================================
@@ -1605,7 +1997,8 @@ button { cursor: pointer; }
   .glass-plan-card { flex: 0 0 260px; }
 
   .pattern-craft .hero,
-  .pattern-studio .hero {
+  .pattern-studio .hero,
+  .pattern-puerto .hero {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 18px 16px 0;
@@ -1624,7 +2017,9 @@ button { cursor: pointer; }
     min-height: auto;
   }
   .pattern-studio .hero img,
-  .pattern-studio .hero-content {
+  .pattern-studio .hero-content,
+  .pattern-puerto .hero img,
+  .pattern-puerto .hero-content {
     grid-column: auto;
     grid-row: auto;
   }
@@ -1635,6 +2030,18 @@ button { cursor: pointer; }
     padding: 18px 0 12px;
   }
   .pattern-studio .hero .primary-action {
+    width: 100%;
+    min-width: 0;
+  }
+  .pattern-puerto .hero img {
+    min-height: auto;
+    height: 260px;
+  }
+  .pattern-puerto .hero-content {
+    min-height: auto;
+    padding: 24px 20px;
+  }
+  .pattern-puerto .hero .primary-action {
     width: 100%;
     min-width: 0;
   }
@@ -1651,6 +2058,10 @@ button { cursor: pointer; }
     padding: 20px 16px 6px;
   }
   .craft-plan-board {
+    grid-template-columns: 1fr;
+  }
+  .puerto-benefits,
+  .puerto-plan-grid {
     grid-template-columns: 1fr;
   }
   .studio-plan-row {
@@ -1670,8 +2081,10 @@ button { cursor: pointer; }
   .bento-bottom-bar .primary-action { min-width: 130px; }
   .pattern-craft .bento-bottom-bar,
   .pattern-studio .bento-bottom-bar,
+  .pattern-puerto .bento-bottom-bar,
   .pattern-craft .plan-fixed-cta,
-  .pattern-studio .plan-fixed-cta {
+  .pattern-studio .plan-fixed-cta,
+  .pattern-puerto .plan-fixed-cta {
     align-items: stretch;
   }
 }
@@ -1700,6 +2113,7 @@ button { cursor: pointer; }
 
   .pattern-craft .hero h1 { font-size: 30px; }
   .pattern-studio .hero h1 { font-size: 34px; }
+  .pattern-puerto .hero h1 { font-size: 30px; }
   .craft-section {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -1719,6 +2133,9 @@ button { cursor: pointer; }
   }
   .craft-plan-card {
     grid-template-rows: 140px auto;
+  }
+  .puerto-plan-card {
+    grid-template-rows: 150px auto;
   }
 
   .shell { padding: 14px; }

@@ -8,6 +8,7 @@
   - `bento`: 旬のベントー
   - `craft`: CRAFT HARVEST
   - `studio`: ARCHETYPE
+  - `puerto`: Puerto Reservation
 - Full happy path:
   `TOP -> プラン選択 -> 日時・人数 -> お客様情報 -> 来園メモ -> 支払い -> 確認 -> 完了`
 - Account branch:
@@ -19,6 +20,7 @@
 /?pattern=bento
 /?pattern=craft
 /?pattern=studio
+/?pattern=puerto
 ```
 
 The previous `neumorphism` and `glassmorphism` query keys remain as compatibility redirects, but they are no longer active review concepts. Legacy query keys such as `fruit-trip`, `family-fun`, and `seasonal-ticket` are mapped to the current concepts.
