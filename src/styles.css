@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Kiwi+Maru:wght@400;500&family=Zen+Maru+Gothic:wght@500;700;900&display=swap");
+
 /* ================================================
    Booking Reservation Demo — BG / Step / Slide / PR Polish
    ================================================ */
@@ -46,6 +48,24 @@ button { cursor: pointer; }
 .pattern-bento.app {
   background-blend-mode: luminosity;
 }
+.pattern-craft.app {
+  font-family: "Zen Maru Gothic", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background-color: #faf6f0;
+  background-image:
+    radial-gradient(#e6dfcd 0.7px, transparent 0.7px),
+    radial-gradient(#e6dfcd 0.7px, #faf6f0 0.7px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  background-attachment: fixed;
+}
+.pattern-studio.app {
+  background-color: #fbfbf9;
+  background-image:
+    linear-gradient(rgba(15, 20, 28, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 20, 28, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-attachment: fixed;
+}
 
 /* ================================================
    DEMO HEADER — shared base
@@ -92,6 +112,52 @@ button { cursor: pointer; }
 .pattern-bento .demo-header { background: rgba(255,255,255,0.97); border-bottom: 2px solid var(--border); }
 .pattern-bento .demo-tab { border-radius: 8px; font-weight: 900; }
 .pattern-bento .demo-tab.is-active { border-radius: 8px; }
+.pattern-craft .demo-header {
+  background: #fffdf8;
+  border-bottom: 3px solid #2b2a27;
+  box-shadow: 0 3px 0 rgba(43,42,39,0.08);
+}
+.pattern-craft .demo-tab {
+  border: 2px solid #2b2a27;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background: #fffdf8;
+  color: #2b2a27;
+  box-shadow: 2px 2px 0 #2b2a27;
+  font-weight: 900;
+}
+.pattern-craft .demo-tab.is-active {
+  background: #ff914d;
+  border-color: #2b2a27;
+  color: #fff;
+  box-shadow: 4px 4px 0 #2b2a27;
+}
+.pattern-craft .icon-button {
+  border: 2px solid #2b2a27;
+  border-radius: 12px 5px 10px 6px / 6px 10px 5px 12px;
+  background: #d2e9cb;
+  box-shadow: 2px 2px 0 #2b2a27;
+}
+.pattern-studio .demo-header {
+  background: rgba(251,251,249,0.94);
+  border-bottom: 1px solid #e2e2dc;
+}
+.pattern-studio .demo-tab {
+  border-radius: 0;
+  background: transparent;
+  color: #72716b;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+.pattern-studio .demo-tab.is-active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+  box-shadow: none;
+}
+.pattern-studio .icon-button {
+  border-radius: 0;
+  background: #f2f1ec;
+}
 
 /* ================================================
    UNIFIED STEPPER — left-aligned, number + label
@@ -146,6 +212,51 @@ button { cursor: pointer; }
 }
 .pattern-bento .unified-stepper {
   background: rgba(255,255,255,0.97); border-bottom: 2px solid var(--border);
+}
+.pattern-craft .unified-stepper {
+  background: #fffdf8;
+  border-bottom: 3px solid #2b2a27;
+}
+.pattern-craft .step-item {
+  border: 2px solid transparent;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+.pattern-craft .step-item.current {
+  border-color: #2b2a27;
+  background: #fff3d2;
+  color: #2b2a27;
+}
+.pattern-craft .step-num {
+  border: 2px solid #2b2a27;
+  background: #fffdf8;
+  color: #2b2a27;
+}
+.pattern-craft .step-item.current .step-num,
+.pattern-craft .step-item.done .step-num {
+  background: #6f8f6a;
+  color: #fff;
+}
+.pattern-studio .unified-stepper {
+  top: 53px;
+  background: rgba(251,251,249,0.94);
+  border-bottom: 1px solid #e2e2dc;
+}
+.pattern-studio .step-item {
+  border-radius: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pattern-studio .step-num {
+  border-radius: 0;
+  background: #f2f1ec;
+}
+.pattern-studio .step-item.current {
+  background: transparent;
+  color: #c85a32;
+}
+.pattern-studio .step-item.current .step-num {
+  background: #111;
+  color: #fff;
 }
 
 /* ================================================
@@ -211,6 +322,136 @@ button { cursor: pointer; }
 .pattern-bento .eyebrow { background: var(--primary); color: #fff; font-weight: 900; letter-spacing: 0.06em; border-radius: 6px; }
 .pattern-bento .hero-actions { max-width: 100%; display: grid; gap: 12px; }
 .pattern-bento .hero .primary-action { min-height: 52px; border-radius: 10px; font-size: 15px; font-weight: 900; }
+
+/* --- Craft & Harvest Hero --- */
+.pattern-craft .hero {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 28px 20px 0;
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 28px;
+  align-items: stretch;
+}
+.pattern-craft .hero img {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid #2b2a27;
+  border-radius: 30px 15px 40px 20px / 20px 40px 15px 30px;
+  box-shadow: 8px 8px 0 #2b2a27;
+}
+.pattern-craft .hero-content {
+  position: relative;
+  min-height: 420px;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  padding: 34px;
+  background: #fffdf8;
+  border: 3px solid #2b2a27;
+  border-radius: 120px 20px 100px 25px / 25px 95px 20px 115px;
+  box-shadow: 8px 8px 0 #2b2a27;
+}
+.pattern-craft .eyebrow {
+  justify-self: start;
+  background: rgba(254, 240, 138, 0.9);
+  color: #7b4b00;
+  border-radius: 0;
+  transform: rotate(-1.5deg);
+  border-left: 3px dashed rgba(43,42,39,0.18);
+  border-right: 3px dashed rgba(43,42,39,0.18);
+}
+.pattern-craft .hero h1 {
+  margin: 0;
+  color: #2b2a27;
+  font-family: "Kiwi Maru", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 500;
+  font-size: clamp(30px, 5.6vw, 54px);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+.pattern-craft .hero p:not(.eyebrow) {
+  margin: 0;
+  max-width: 520px;
+  color: #6f675c;
+  font-weight: 800;
+  line-height: 1.8;
+}
+.pattern-craft .hero .primary-action {
+  min-height: 62px;
+  border: 3px solid #2b2a27;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  background: #ff914d;
+  box-shadow: 4px 4px 0 #2b2a27;
+}
+
+/* --- Archetype Studio Hero --- */
+.pattern-studio .hero {
+  width: min(100%, 1180px);
+  min-height: 620px;
+  margin: 0 auto;
+  padding: 36px 20px 0;
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 34px;
+  align-items: stretch;
+}
+.pattern-studio .hero img {
+  position: relative;
+  grid-column: 2;
+  width: 100%;
+  height: 620px;
+  object-fit: cover;
+  border: 1px solid #e2e2dc;
+  filter: saturate(0.82) contrast(1.02);
+}
+.pattern-studio .hero-shade { display: none; }
+.pattern-studio .hero-content {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  display: grid;
+  align-content: end;
+  gap: 22px;
+  padding: 24px 0 28px;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #e2e2dc;
+}
+.pattern-studio .eyebrow {
+  justify-self: start;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #c85a32;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+.pattern-studio .hero h1 {
+  margin: 0;
+  color: #111;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(36px, 7vw, 74px);
+  font-weight: 500;
+  line-height: 1;
+}
+.pattern-studio .hero p:not(.eyebrow) {
+  margin: 0;
+  max-width: 520px;
+  color: #72716b;
+  font-size: 15px;
+  line-height: 1.9;
+}
+.pattern-studio .hero .primary-action {
+  width: fit-content;
+  min-width: 260px;
+  border-radius: 0;
+  background: #111;
+  color: #fff;
+  box-shadow: none;
+}
 
 /* ================================================
    BENEFITS — 3 completely different structures
@@ -282,6 +523,65 @@ button { cursor: pointer; }
 .bento-benefit-1 { background: var(--chip); border-color: transparent; }
 .bento-benefit-2 { background: rgba(255,255,255,0.95); }
 
+.craft-benefits {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 26px 20px 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.craft-benefit-sticker {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 18px;
+  background: #fffdf8;
+  border: 2px solid #2b2a27;
+  border-radius: 120px 20px 100px 25px / 25px 95px 20px 115px;
+  box-shadow: 4px 4px 0 #2b2a27;
+}
+.craft-benefit-sticker:nth-child(2) {
+  background: #d2e9cb;
+  transform: rotate(1deg);
+}
+.craft-benefit-sticker:nth-child(3) {
+  background: #ffd1d1;
+  transform: rotate(-0.8deg);
+}
+.craft-benefit-sticker svg { color: #ff914d; }
+.craft-benefit-sticker strong { color: #2b2a27; font-weight: 900; }
+.craft-benefit-sticker p { margin: 4px 0 0; color: #6f675c; font-size: 12px; font-weight: 800; line-height: 1.65; }
+
+.studio-benefits {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: 26px 20px 8px;
+  display: grid;
+  border-top: 1px solid #e2e2dc;
+}
+.studio-benefit-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid #e2e2dc;
+}
+.studio-benefit-row > span {
+  color: #c85a32;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+.studio-benefit-row > div {
+  display: grid;
+  grid-template-columns: auto 180px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+.studio-benefit-row svg { color: #b28e46; }
+.studio-benefit-row strong { color: #111; font-family: Georgia, serif; font-size: 20px; font-weight: 500; }
+.studio-benefit-row p { margin: 0; color: #72716b; font-size: 13px; line-height: 1.8; }
+
 /* ================================================
    SHELL
    ================================================ */
@@ -345,6 +645,67 @@ button { cursor: pointer; }
   margin: 0; color: #fff; font-size: clamp(18px,4.5vw,24px);
   font-weight: 900; line-height: 1.2;
 }
+.craft-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 18px;
+  background: #fffdf8;
+  border: 3px solid #2b2a27;
+  border-radius: 120px 20px 100px 25px / 25px 95px 20px 115px;
+  box-shadow: 5px 5px 0 #2b2a27;
+}
+.craft-section-mark {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: #ff914d;
+  color: #fff;
+  border: 2px solid #2b2a27;
+  border-radius: 48% 52% 51% 49% / 55% 48% 52% 45%;
+}
+.craft-section p {
+  margin: 0 0 3px;
+  color: #6f675c;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+.craft-section h2 {
+  margin: 0;
+  color: #2b2a27;
+  font-family: "Kiwi Maru", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 500;
+  font-size: clamp(22px, 5vw, 34px);
+  line-height: 1.12;
+}
+.studio-section {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 22px 0;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #e2e2dc;
+}
+.studio-section p {
+  margin: 0 0 8px;
+  color: #c85a32;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+.studio-section h2 {
+  margin: 0;
+  color: #111;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: 500;
+  line-height: 1.04;
+}
+.studio-section svg { color: #b28e46; }
 
 /* ================================================
    BUTTONS — concept-aware
@@ -383,6 +744,46 @@ button { cursor: pointer; }
 
 .pattern-bento .primary-action { border-radius: 10px; }
 .pattern-bento .back-action { border-radius: 10px; }
+.pattern-craft .primary-action,
+.pattern-craft .back-action,
+.pattern-craft .wide-choice {
+  border: 3px solid #2b2a27;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: 4px 4px 0 #2b2a27;
+}
+.pattern-craft .primary-action { background: #ff914d; color: #fff; }
+.pattern-craft .back-action { background: #fffdf8; color: #2b2a27; }
+.pattern-craft .wide-choice { background: #fffdf8; color: #2b2a27; }
+.pattern-craft .wide-choice.secondary { background: #6f8f6a; color: #fff; }
+.pattern-craft .primary-action:active:not(:disabled),
+.pattern-craft .back-action:active,
+.pattern-craft .wide-choice:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 #2b2a27;
+}
+.pattern-studio .primary-action,
+.pattern-studio .back-action,
+.pattern-studio .wide-choice {
+  border-radius: 0;
+  box-shadow: none;
+  letter-spacing: 0.04em;
+}
+.pattern-studio .primary-action { background: #111; color: #fff; }
+.pattern-studio .back-action {
+  background: transparent;
+  color: #111;
+  border: 1px solid #e2e2dc;
+}
+.pattern-studio .wide-choice {
+  background: #fff;
+  color: #111;
+  border: 1px solid #e2e2dc;
+}
+.pattern-studio .wide-choice.secondary {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
 
 /* ================================================
    NEU BIG CTA
@@ -455,6 +856,26 @@ button { cursor: pointer; }
   background: rgba(255,255,255,0.97);
   border-top: 2px solid var(--border);
 }
+.plan-fixed-cta-craft,
+.pattern-craft .bento-bottom-bar {
+  background: #fffdf8;
+  border-top: 3px solid #2b2a27;
+  box-shadow: 0 -4px 0 rgba(43,42,39,0.08);
+}
+.plan-fixed-cta-studio,
+.pattern-studio .bento-bottom-bar {
+  background: rgba(251,251,249,0.96);
+  border-top: 1px solid #111;
+  box-shadow: none;
+}
+.pattern-craft .bento-bar-info strong,
+.pattern-craft .plan-fixed-info strong { color: #2b2a27; }
+.pattern-studio .bento-bar-info strong,
+.pattern-studio .plan-fixed-info strong {
+  color: #111;
+  font-family: Georgia, serif;
+  font-weight: 500;
+}
 
 /* ================================================
    PANEL — concept-aware
@@ -478,6 +899,30 @@ button { cursor: pointer; }
 .pattern-bento .panel {
   border: 2px solid var(--border); border-radius: 10px;
   background: rgba(255,255,255,0.95); box-shadow: none;
+}
+.pattern-craft .panel {
+  border: 3px solid #2b2a27;
+  border-radius: 120px 20px 100px 25px / 25px 95px 20px 115px;
+  background: #fffdf8;
+  box-shadow: 5px 5px 0 #2b2a27;
+}
+.pattern-craft .panel h2 {
+  color: #2b2a27;
+  font-family: "Kiwi Maru", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+.pattern-studio .panel {
+  border: 1px solid #e2e2dc;
+  border-radius: 0;
+  background: rgba(255,255,255,0.9);
+  box-shadow: none;
+}
+.pattern-studio .panel h2 {
+  color: #111;
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 /* ================================================
@@ -511,6 +956,107 @@ button { cursor: pointer; }
 }
 .neu-plan-tile strong { color: var(--heading); font-size: 17px; font-weight: 900; }
 .neu-plan-tile p { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.6; }
+
+/* --- Craft: hand-stamped harvest tickets --- */
+.craft-plan-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.craft-plan-card {
+  display: grid;
+  grid-template-rows: 170px auto;
+  overflow: hidden;
+  background: #fffdf8;
+  border: 3px solid #2b2a27;
+  border-radius: 30px 15px 40px 20px / 20px 40px 15px 30px;
+  box-shadow: 5px 5px 0 #2b2a27;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.craft-plan-card:nth-child(2) { transform: rotate(0.7deg); }
+.craft-plan-card:nth-child(3) { transform: rotate(-0.6deg); }
+.craft-plan-card:hover {
+  transform: translate(-2px, -2px) rotate(0deg);
+  box-shadow: 8px 8px 0 #2b2a27;
+}
+.craft-plan-card.is-selected {
+  background: #fff3d2;
+  outline: 4px solid #ff914d;
+  outline-offset: -7px;
+}
+.craft-plan-photo {
+  border-bottom: 3px solid #2b2a27;
+  overflow: hidden;
+}
+.craft-plan-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.craft-plan-text { padding: 18px; display: grid; gap: 8px; }
+.craft-plan-text strong {
+  color: #2b2a27;
+  font-family: "Kiwi Maru", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.2;
+}
+.craft-plan-text p {
+  margin: 0;
+  color: #6f675c;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.65;
+}
+
+/* --- Studio: catalog rows --- */
+.studio-plan-list {
+  display: grid;
+  border-top: 1px solid #111;
+}
+.studio-plan-row {
+  display: grid;
+  grid-template-columns: 52px 190px 1fr;
+  gap: 22px;
+  align-items: stretch;
+  padding: 18px 0;
+  border-bottom: 1px solid #e2e2dc;
+}
+.studio-plan-row.is-selected {
+  background: linear-gradient(90deg, rgba(200,90,50,0.08), transparent);
+}
+.studio-plan-index {
+  color: #c85a32;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  padding-top: 4px;
+}
+.studio-plan-row img {
+  width: 100%;
+  height: 144px;
+  object-fit: cover;
+  border: 1px solid #e2e2dc;
+  filter: saturate(0.82);
+}
+.studio-plan-copy {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+.studio-plan-copy strong {
+  color: #111;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(21px, 4vw, 34px);
+  font-weight: 500;
+  line-height: 1.08;
+}
+.studio-plan-copy p {
+  margin: 0;
+  color: #72716b;
+  line-height: 1.7;
+}
 
 /* --- Glassmorphism: Horizontal scroll photo-dominant cards --- */
 .glass-carousel-wrap {
@@ -642,6 +1188,44 @@ button { cursor: pointer; }
 .pattern-bento .plan-detail-btn, .pattern-bento .plan-select-btn {
   border-radius: 6px; min-height: 32px; font-size: 12px;
 }
+.pattern-craft .plan-times span {
+  border: 2px solid #2b2a27;
+  border-radius: 12px 5px 10px 6px / 6px 10px 5px 12px;
+  background: #d2e9cb;
+  color: #2f653a;
+}
+.pattern-craft .plan-detail-btn,
+.pattern-craft .plan-select-btn {
+  border: 2px solid #2b2a27;
+  border-radius: 12px 5px 10px 6px / 6px 10px 5px 12px;
+  background: #fffdf8;
+  color: #2b2a27;
+  box-shadow: 2px 2px 0 #2b2a27;
+}
+.pattern-craft .plan-select-btn,
+.pattern-craft .plan-select-btn.is-selected {
+  background: #6f8f6a;
+  color: #fff;
+}
+.pattern-studio .plan-times span {
+  border-radius: 0;
+  background: #f2f1ec;
+  color: #8a4a30;
+  letter-spacing: 0.08em;
+}
+.pattern-studio .plan-detail-btn,
+.pattern-studio .plan-select-btn {
+  border: 1px solid #e2e2dc;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+}
+.pattern-studio .plan-select-btn,
+.pattern-studio .plan-select-btn.is-selected {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
 
 /* ================================================
    CHOICE GRID & COUNTER
@@ -670,6 +1254,31 @@ button { cursor: pointer; }
 }
 .pattern-bento .choice-grid button { border-radius: 8px; border: 2px solid var(--border); background: rgba(255,255,255,0.95); }
 .pattern-bento .choice-grid button.is-active { border-color: var(--secondary); }
+.pattern-craft .choice-grid button {
+  border: 2px solid #2b2a27;
+  border-radius: 12px 5px 10px 6px / 6px 10px 5px 12px;
+  background: #fffdf8;
+  color: #2b2a27;
+  box-shadow: 2px 2px 0 #2b2a27;
+}
+.pattern-craft .choice-grid button.is-active {
+  background: #6f8f6a;
+  border-color: #2b2a27;
+  color: #fff;
+  box-shadow: 3px 3px 0 #2b2a27;
+}
+.pattern-studio .choice-grid button {
+  border-radius: 0;
+  border: 1px solid #e2e2dc;
+  background: #fff;
+  color: #111;
+}
+.pattern-studio .choice-grid button.is-active {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+  box-shadow: none;
+}
 
 .counter-row { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 8px 0; }
 .counter-row strong { font-weight: 900; }
@@ -683,6 +1292,17 @@ button { cursor: pointer; }
 
 .pattern-neumorphism .counter-row button { border-radius: 14px; box-shadow: 3px 3px 6px rgba(163,177,198,0.3), -3px -3px 6px rgba(255,255,255,0.6); }
 .pattern-bento .counter-row button { border-radius: 8px; }
+.pattern-craft .counter-row button {
+  border: 2px solid #2b2a27;
+  border-radius: 12px 5px 10px 6px / 6px 10px 5px 12px;
+  background: #fff3d2;
+  color: #2b2a27;
+}
+.pattern-studio .counter-row button {
+  border-radius: 0;
+  background: #f2f1ec;
+  color: #111;
+}
 
 /* ================================================
    WIDE CHOICE
@@ -721,6 +1341,25 @@ button { cursor: pointer; }
   background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.45);
 }
 .pattern-bento .field input, .pattern-bento .field textarea { border-radius: 8px; border: 2px solid var(--border); }
+.pattern-craft .field span { color: #6f675c; }
+.pattern-craft .field input,
+.pattern-craft .field textarea {
+  border: 2px solid #2b2a27;
+  border-radius: 12px 5px 10px 6px / 6px 10px 5px 12px;
+  background: #fffdf8;
+  color: #2b2a27;
+}
+.pattern-studio .field span {
+  color: #72716b;
+  letter-spacing: 0.08em;
+}
+.pattern-studio .field input,
+.pattern-studio .field textarea {
+  border: 1px solid #e2e2dc;
+  border-radius: 0;
+  background: #fff;
+  color: #111;
+}
 
 /* ================================================
    PAYMENT
@@ -749,6 +1388,25 @@ button { cursor: pointer; }
   backdrop-filter: blur(8px); border-radius: 18px;
 }
 .pattern-bento .payment-list button { border-radius: 10px; }
+.pattern-craft .payment-list button {
+  border: 2px solid #2b2a27;
+  border-radius: 120px 20px 100px 25px / 25px 95px 20px 115px;
+  background: #fffdf8;
+  box-shadow: 3px 3px 0 #2b2a27;
+}
+.pattern-craft .payment-list button.is-selected {
+  background: #d2e9cb;
+  border-color: #2b2a27;
+}
+.pattern-studio .payment-list button {
+  border: 1px solid #e2e2dc;
+  border-radius: 0;
+  background: #fff;
+}
+.pattern-studio .payment-list button.is-selected {
+  border-color: #111;
+  background: #f6f2e8;
+}
 
 /* ================================================
    CONFIRM — concept-specific structures
@@ -793,6 +1451,40 @@ button { cursor: pointer; }
 .bento-receipt-items > div:last-child { border-bottom: 0; }
 .bento-receipt-items span { color: var(--muted); font-size: 13px; font-weight: 900; }
 .bento-receipt-items strong { color: var(--heading); font-weight: 900; }
+.pattern-craft .bento-receipt-card {
+  background: #fffdf8;
+  border: 3px solid #2b2a27;
+  border-radius: 120px 20px 100px 25px / 25px 95px 20px 115px;
+  box-shadow: 5px 5px 0 #2b2a27;
+}
+.pattern-craft .bento-receipt-card::before {
+  background: repeating-linear-gradient(90deg, #faf6f0 0px, #faf6f0 7px, transparent 7px, transparent 14px);
+}
+.pattern-craft .bento-receipt-items > div { border-bottom-color: #2b2a27; }
+.pattern-craft .bento-receipt-header {
+  border: 2px solid #2b2a27;
+  border-radius: 0;
+  background: #ff914d;
+}
+.pattern-studio .bento-receipt-card {
+  background: #fff;
+  border: 1px solid #e2e2dc;
+  border-radius: 0;
+  box-shadow: none;
+}
+.pattern-studio .bento-receipt-card::before { display: none; }
+.pattern-studio .bento-receipt-items > div {
+  border-bottom: 1px solid #e2e2dc;
+}
+.pattern-studio .bento-receipt-header {
+  border-radius: 0;
+  background: #111;
+  letter-spacing: 0.12em;
+}
+.pattern-studio .bento-receipt-complete h1 {
+  font-family: Georgia, serif;
+  font-weight: 500;
+}
 
 /* ================================================
    COMPLETE — 3 different celebrations
@@ -896,6 +1588,7 @@ button { cursor: pointer; }
 
   .neu-benefits { gap: 16px; }
   .bento-benefits { grid-template-columns: 1fr 1fr; }
+  .pattern-studio .shell { width: min(100%, 1180px); }
 }
 
 /* ================================================
@@ -911,6 +1604,63 @@ button { cursor: pointer; }
 
   .glass-plan-card { flex: 0 0 260px; }
 
+  .pattern-craft .hero,
+  .pattern-studio .hero {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px 16px 0;
+  }
+  .pattern-craft .hero img {
+    min-height: auto;
+    height: 230px;
+    box-shadow: 5px 5px 0 #2b2a27;
+  }
+  .pattern-craft .hero-content {
+    min-height: auto;
+    padding: 24px 20px;
+    box-shadow: 5px 5px 0 #2b2a27;
+  }
+  .pattern-studio .hero {
+    min-height: auto;
+  }
+  .pattern-studio .hero img,
+  .pattern-studio .hero-content {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .pattern-studio .hero img {
+    height: 300px;
+  }
+  .pattern-studio .hero-content {
+    padding: 18px 0 12px;
+  }
+  .pattern-studio .hero .primary-action {
+    width: 100%;
+    min-width: 0;
+  }
+  .craft-benefits {
+    grid-template-columns: 1fr;
+    padding: 20px 16px 6px;
+  }
+  .studio-benefit-row,
+  .studio-benefit-row > div {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .studio-benefits {
+    padding: 20px 16px 6px;
+  }
+  .craft-plan-board {
+    grid-template-columns: 1fr;
+  }
+  .studio-plan-row {
+    grid-template-columns: 34px 108px 1fr;
+    gap: 12px;
+  }
+  .studio-plan-row img {
+    height: 126px;
+  }
+
   .field-grid, .choice-grid { grid-template-columns: repeat(2, 1fr); }
 
   .pattern-glassmorphism .hero { min-height: 560px; }
@@ -918,6 +1668,12 @@ button { cursor: pointer; }
 
   .bento-bottom-bar { padding: 10px 16px; }
   .bento-bottom-bar .primary-action { min-width: 130px; }
+  .pattern-craft .bento-bottom-bar,
+  .pattern-studio .bento-bottom-bar,
+  .pattern-craft .plan-fixed-cta,
+  .pattern-studio .plan-fixed-cta {
+    align-items: stretch;
+  }
 }
 
 /* ================================================
@@ -941,6 +1697,29 @@ button { cursor: pointer; }
 
   .bento-ticket img { height: 100px; }
   .bento-ticket { grid-template-rows: 100px auto; }
+
+  .pattern-craft .hero h1 { font-size: 30px; }
+  .pattern-studio .hero h1 { font-size: 34px; }
+  .craft-section {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .studio-section {
+    align-items: start;
+  }
+  .studio-plan-row {
+    grid-template-columns: 1fr;
+    padding: 16px 0;
+  }
+  .studio-plan-row img {
+    height: 160px;
+  }
+  .studio-plan-index {
+    padding: 0;
+  }
+  .craft-plan-card {
+    grid-template-rows: 140px auto;
+  }
 
   .shell { padding: 14px; }
   .choice-grid { grid-template-columns: repeat(2, 1fr); }

@@ -5,9 +5,9 @@
 ## What This Demo Includes
 
 - TOP / plan selection / reservation flow concepts:
-  - `neumorphism`: ふんわり予約
-  - `glassmorphism`: 光のフルーツ旅
   - `bento`: 旬のベントー
+  - `craft`: CRAFT HARVEST
+  - `studio`: ARCHETYPE
 - Full happy path:
   `TOP -> プラン選択 -> 日時・人数 -> お客様情報 -> 来園メモ -> 支払い -> 確認 -> 完了`
 - Account branch:
@@ -16,12 +16,12 @@
 ## Review URLs
 
 ```text
-/?pattern=neumorphism
-/?pattern=glassmorphism
 /?pattern=bento
+/?pattern=craft
+/?pattern=studio
 ```
 
-Legacy query keys such as `fruit-trip`, `family-fun`, and `seasonal-ticket` are mapped to the current three concepts.
+The previous `neumorphism` and `glassmorphism` query keys remain as compatibility redirects, but they are no longer active review concepts. Legacy query keys such as `fruit-trip`, `family-fun`, and `seasonal-ticket` are mapped to the current concepts.
 
 ## Local
 

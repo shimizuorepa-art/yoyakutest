@@ -44,7 +44,7 @@ const Icon = ({ as: Component, size = 20 }) => (
 
 function App() {
   const [patternKey, setPatternKey] = useState(() =>
-    getInitial("pattern", "neumorphism")
+    getInitial("pattern", "bento")
   );
   const [screen, setScreen] = useState("top");
   const [planId, setPlanId] = useState(null);
@@ -211,11 +211,28 @@ function Stepper({ active }) {
    Section Header — 3 different structures
    ================================================ */
 function SectionHeader({ eyebrow, title, icon, pk }) {
-  if (pk === "neumorphism") {
+  if (pk === "craft") {
     return (
-      <div className="neu-section">
-        <Icon as={icon} size={28} />
-        <h2>{title}</h2>
+      <div className="craft-section">
+        <span className="craft-section-mark">
+          <Icon as={icon} size={18} />
+        </span>
+        <div>
+          <p>{eyebrow}</p>
+          <h2>{title}</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (pk === "studio") {
+    return (
+      <div className="studio-section">
+        <div>
+          <p>{eyebrow}</p>
+          <h2>{title}</h2>
+        </div>
+        <Icon as={icon} size={22} />
       </div>
     );
   }
@@ -252,7 +269,7 @@ function TopScreen({ hero, pk, onStart }) {
     <>
       <section className="hero">
         <img src={hero.image} alt="" />
-        {pk === "glassmorphism" && <div className="hero-shade" />}
+        {(pk === "glassmorphism" || pk === "studio") && <div className="hero-shade" />}
         <div className="hero-content">
           <p className="eyebrow">{hero.eyebrow}</p>
           <h1>{hero.headline}</h1>
@@ -274,12 +291,11 @@ function TopScreen({ hero, pk, onStart }) {
    Benefits — 3 completely different structures
    ================================================ */
 function BenefitsSection({ benefits, pk }) {
-  if (pk === "neumorphism") {
-    // Soft floating chip cloud on sky bg
+  if (pk === "craft") {
     return (
-      <section className="neu-benefits">
+      <section className="craft-benefits">
         {benefits.map(([title, text, icon]) => (
-          <div className="neu-benefit-chip" key={title}>
+          <div className="craft-benefit-sticker" key={title}>
             <Icon as={icon} size={18} />
             <div>
               <strong>{title}</strong>
@@ -291,21 +307,19 @@ function BenefitsSection({ benefits, pk }) {
     );
   }
 
-  if (pk === "glassmorphism") {
-    // Single glass panel with keyword list
+  if (pk === "studio") {
     return (
-      <section className="glass-benefits">
-        <div className="glass-benefit-panel">
-          {benefits.map(([title, text, icon]) => (
-            <div className="glass-benefit-row" key={title}>
+      <section className="studio-benefits">
+        {benefits.map(([title, text, icon], i) => (
+          <div className="studio-benefit-row" key={title}>
+            <span>{String(i + 1).padStart(2, "0")}</span>
+            <div>
               <Icon as={icon} size={18} />
-              <div>
-                <strong>{title}</strong>
-                <span>{text}</span>
-              </div>
+              <strong>{title}</strong>
+              <p>{text}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </section>
     );
   }
@@ -354,15 +368,15 @@ function PlanCardContent({ plan, selected, onSelect }) {
 
 function PlansScreen({ selected, onSelect, onNext, onBack, pk, copy, selectedPlan }) {
   const planCards = () => {
-    if (pk === "neumorphism") {
+    if (pk === "craft") {
       return (
-        <div className="neu-plan-list">
+        <div className="craft-plan-board">
           {plans.map((plan) => (
-            <div className={`neu-plan-tile ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
-              <div className="neu-plan-photo">
+            <div className={`craft-plan-card ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+              <div className="craft-plan-photo">
                 <img src={plan.image} alt="" />
               </div>
-              <div className="neu-plan-text">
+              <div className="craft-plan-text">
                 <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
               </div>
             </div>
@@ -372,6 +386,21 @@ function PlansScreen({ selected, onSelect, onNext, onBack, pk, copy, selectedPla
     }
     if (pk === "glassmorphism") {
       return <GlassCarousel selected={selected} onSelect={onSelect} />;
+    }
+    if (pk === "studio") {
+      return (
+        <div className="studio-plan-list">
+          {plans.map((plan, i) => (
+            <div className={`studio-plan-row ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+              <span className="studio-plan-index">{String(i + 1).padStart(2, "0")}</span>
+              <img src={plan.image} alt="" />
+              <div className="studio-plan-copy">
+                <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
     }
     // bento
     return (
@@ -507,7 +536,7 @@ function ReserveScreen({ date, time, adult, child, onDate, onTime, onAdult, onCh
     <>
       <SectionHeader eyebrow={copy.dateEyebrow} title={copy.dateTitle} icon={CalendarDays} pk={pk} />
       {content}
-      {pk === "bento" ? (
+      {pk === "bento" || pk === "craft" || pk === "studio" ? (
         <>
           <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
           <div className="bento-bottom-bar">
@@ -665,7 +694,7 @@ function ConfirmScreen({ plan, date, time, adult, child, payment, onNext, onBack
     );
   }
 
-  if (pk === "bento") {
+  if (pk === "bento" || pk === "craft" || pk === "studio") {
     return (
       <>
         <SectionHeader eyebrow={copy.confirmEyebrow} title={copy.confirmTitle} icon={CheckCircle2} pk={pk} />
@@ -766,7 +795,7 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
     );
   }
 
-  // bento
+  // bento / craft / studio
   return (
     <>
       <div className="bento-receipt-card bento-receipt-complete">
@@ -821,7 +850,7 @@ function CtaBlock({ pk, onNext, onBack, nextLabel = "次へ", disabled = false }
       </div>
     );
   }
-  if (pk === "bento") {
+  if (pk === "bento" || pk === "craft" || pk === "studio") {
     return (
       <>
         {onBack && <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>}
