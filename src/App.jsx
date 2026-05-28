@@ -674,7 +674,7 @@ function MemoScreen({ onNext, onBack, pk, copy }) {
       <section className="panel">
         <label className="field full">
           <span>連絡事項</span>
-          <textarea defaultValue="小さな子ども連れです。入口に近い案内だと助かります。" />
+          <textarea defaultValue="ベビーカーで参加予定です。入口に近い案内だと助かります。" />
         </label>
       </section>
       <CtaBlock pk={pk} onNext={onNext} onBack={onBack} nextLabel="お支払いへ" />
@@ -713,11 +713,11 @@ function PaymentScreen({ payment, onPayment, onNext, onBack, pk, copy }) {
    ================================================ */
 function ConfirmScreen({ plan, date, time, adult, child, payment, onNext, onBack, pk, copy }) {
   const rows = [
-    ["施設", "蒲郡オレンジパーク"],
+    ["施設", "サンプル体験パーク"],
     ["体験", plan.title],
     ["日時", `${date} ${time}`],
     ["人数", `大人${adult}名${child ? ` / 小人${child}名` : ""}`],
-    ["支払い", payment === "credit" ? "クレジットカード" : "当日現地払い"],
+    ["支払い", payment === "credit" ? "事前決済（サンプル）" : "当日受付払い"],
   ];
 
   if (pk === "glassmorphism") {
@@ -783,7 +783,7 @@ function ConfirmScreen({ plan, date, time, adult, child, payment, onNext, onBack
    ================================================ */
 function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
   const info = [
-    ["施設", "蒲郡オレンジパーク"],
+    ["施設", "サンプル体験パーク"],
     ["体験", plan.title],
     ["日時", `${date} ${time}`],
     ["人数", `大人${adult}名${child ? ` / 小人${child}名` : ""}`],
@@ -800,7 +800,7 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
           <p className="neu-complete-sub">{copy.completeLine2}</p>
           <div className="neu-complete-ref">
             <small>予約番号</small>
-            <strong>OREPA-0523</strong>
+            <strong>SAMPLE-0528</strong>
           </div>
         </div>
         <section className="panel">
@@ -830,7 +830,7 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
             {info.map(([l, v]) => <div key={l}><span>{l}</span><strong>{v}</strong></div>)}
           </div>
           <div className="glass-pass-barcode">
-            <span>OREPA-0523</span>
+            <span>SAMPLE-0528</span>
           </div>
         </div>
         <div className="glass-cta-sheet">
@@ -854,10 +854,10 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
           <Stamp size={28} />
           <span>CONFIRMED</span>
         </div>
-        <div className="bento-receipt-ref">予約番号: OREPA-0523</div>
+        <div className="bento-receipt-ref">予約番号: SAMPLE-0528</div>
       </div>
       <div className="bento-bottom-bar">
-        <div className="bento-bar-info"><small>予約完了</small><strong>蒲郡オレンジパーク</strong></div>
+        <div className="bento-bar-info"><small>予約完了</small><strong>サンプル体験パーク</strong></div>
         <button className="primary-action" onClick={onReset}>TOPへ戻る <Home size={18} /></button>
       </div>
     </>
@@ -918,14 +918,14 @@ function CtaBlock({ pk, onNext, onBack, nextLabel = "次へ", disabled = false }
 }
 
 function sampleValue(label) {
-  if (label.includes("メール")) return "fruit-trip@example.com";
-  if (label.includes("電話")) return "09012345678";
-  if (label.includes("コード")) return "123456";
-  if (label.includes("パスワード")) return "fruitpark2026";
-  if (label === "姓") return "山田";
-  if (label === "名") return "花子";
-  if (label === "セイ") return "ヤマダ";
-  if (label === "メイ") return "ハナコ";
+  if (label.includes("メール")) return "sample@example.com";
+  if (label.includes("電話")) return "08000000000";
+  if (label.includes("コード")) return "654321";
+  if (label.includes("パスワード")) return "sample2026";
+  if (label === "姓") return "佐藤";
+  if (label === "名") return "未来";
+  if (label === "セイ") return "サトウ";
+  if (label === "メイ") return "ミライ";
   return "";
 }
 

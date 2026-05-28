@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-label="Reservation lounge sample image">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbfbf9"/>
+      <stop offset="1" stop-color="#f2f1ec"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="820" fill="url(#wall)"/>
+  <path d="M0 620h1200v200H0z" fill="#111" opacity=".08"/>
+  <rect x="134" y="120" width="370" height="460" fill="#fff" stroke="#111" stroke-width="4"/>
+  <rect x="560" y="120" width="500" height="300" fill="#fff" stroke="#111" stroke-width="4"/>
+  <rect x="188" y="180" width="262" height="340" fill="#c85a32" opacity=".9"/>
+  <circle cx="320" cy="300" r="82" fill="#f6f2e8"/>
+  <path d="M245 452h148" stroke="#f6f2e8" stroke-width="14"/>
+  <rect x="615" y="175" width="390" height="52" fill="#111"/>
+  <rect x="615" y="260" width="250" height="34" fill="#b28e46"/>
+  <rect x="615" y="323" width="320" height="24" fill="#e2e2dc"/>
+  <rect x="180" y="640" width="840" height="34" fill="#111" opacity=".2"/>
+</svg>

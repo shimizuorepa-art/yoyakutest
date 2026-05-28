@@ -1,13 +1,13 @@
 # Booking Reservation Demo
 
-蒲郡オレンジパーク予約フローの単体デモです。既存の予約システムから切り離し、Vercel Previewで確認しやすい軽量なReact/Viteアプリとして作っています。
+予約フローの画面バリエーションを確認するための単体デモです。Vercel Previewで確認しやすい軽量なReact/Viteアプリとして作っています。
 
 ## What This Demo Includes
 
 - TOP / plan selection / reservation flow concepts:
-  - `bento`: 旬のベントー
-  - `craft`: 収穫手帖
-  - `studio`: 果樹園ギャラリー
+  - `bento`: Bento
+  - `craft`: Craft
+  - `studio`: Studio
   - `puerto`: Puerto Reservation
 - Full happy path:
   `TOP -> プラン選択 -> 日時・人数 -> お客様情報 -> 来園メモ -> 支払い -> 確認 -> 完了`
@@ -23,7 +23,7 @@
 /?pattern=puerto
 ```
 
-The previous `neumorphism` and `glassmorphism` query keys remain as compatibility redirects, but they are no longer active review concepts. Legacy query keys such as `fruit-trip`, `family-fun`, and `seasonal-ticket` are mapped to the current concepts.
+The previous `neumorphism` and `glassmorphism` query keys remain as compatibility redirects, but they are no longer active review concepts.
 
 ## Local
 
@@ -60,4 +60,4 @@ The four active review concepts are registered as reusable design-system referen
 ## Notes
 
 - This is a static demo. It does not call reservation APIs, process payments, or store production data.
-- Photos under `public/mock-assets/` are temporary demo assets from Pexels and need final approval before production use.
+- Visual assets under `public/mock-assets/` are sample-only images for this review demo.
