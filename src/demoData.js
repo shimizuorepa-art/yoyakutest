@@ -12,7 +12,11 @@ import {
   WalletCards,
 } from "lucide-react";
 
-const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+const appBaseUrl =
+  typeof document === "undefined"
+    ? import.meta.env.BASE_URL
+    : new URL(import.meta.env.BASE_URL, document.baseURI).href;
+const asset = (path) => new URL(path.replace(/^\/+/, ""), appBaseUrl).href;
 
 export const patterns = {
   bento: {
