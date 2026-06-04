@@ -38,6 +38,11 @@ const getInitial = (key, fallback) => {
   return fallback;
 };
 
+const getInitialNavMode = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("nav") === "bottom" ? "bottom" : "classic";
+};
+
 const Icon = ({ as: Component, size = 20 }) => (
   <Component size={size} strokeWidth={2.4} />
 );
@@ -46,6 +51,7 @@ function App() {
   const [patternKey, setPatternKey] = useState(() =>
     getInitial("pattern", "bento")
   );
+  const [navMode, setNavMode] = useState(getInitialNavMode);
   const [screen, setScreen] = useState("top");
   const [planId, setPlanId] = useState(null);
   const [date, setDate] = useState(dateOptions[0]);
@@ -60,6 +66,7 @@ function App() {
     () => (planId ? plans.find((p) => p.id === planId) : null),
     [planId]
   );
+  const activeStep = screenToStep[screen];
 
   const cssVars = {
     "--bg": pattern.background, "--primary": pattern.primary,
@@ -72,13 +79,26 @@ function App() {
     "--bg-image": `url(${pattern.bgImage})`,
   };
 
+  const updateUrlState = (nextPattern, nextNavMode) => {
+    const params = new URLSearchParams();
+    params.set("pattern", nextPattern);
+    if (nextNavMode === "bottom") params.set("nav", "bottom");
+    window.history.replaceState(null, "", `?${params.toString()}`);
+  };
+
   const updatePattern = (next) => {
     setPatternKey(next);
-    window.history.replaceState(null, "", `?pattern=${next}`);
+    updateUrlState(next, navMode);
+  };
+
+  const updateNavMode = (next) => {
+    setNavMode(next);
+    updateUrlState(patternKey, next);
   };
 
   const resetDemo = () => {
     setScreen("top");
+    setPlanId(null);
     setTime("");
     setAdult(2);
     setChild(0);
@@ -91,64 +111,96 @@ function App() {
   };
 
   const pk = patternKey;
+  const bookingAction = getBookingActionState({
+    screen,
+    selectedPlan,
+    date,
+    time,
+    adult,
+    child,
+    payment,
+    go,
+  });
 
   return (
-    <main className={`app pattern-${pk}`} style={cssVars}>
-      <DemoHeader patternKey={pk} onPattern={updatePattern} onReset={resetDemo} />
+    <main className={`app pattern-${pk} nav-${navMode}`} style={cssVars}>
+      <DemoHeader
+        patternKey={pk}
+        navMode={navMode}
+        onPattern={updatePattern}
+        onNavMode={updateNavMode}
+        onReset={resetDemo}
+      />
 
       {screen === "top" ? (
-        <TopScreen hero={pattern.hero} pk={pk} onStart={() => go("plans")} />
+        <TopScreen
+          hero={pattern.hero}
+          pk={pk}
+          onStart={() => go("plans")}
+          onPlanStart={(id) => {
+            setPlanId(id);
+            go("reserve");
+          }}
+        />
       ) : (
         <>
-          <Stepper active={screenToStep[screen]} />
-          <div className="shell">
-            {screen === "plans" && (
-              <PlansScreen
-                selected={planId} onSelect={setPlanId}
-                onNext={() => go("reserve")} onBack={() => go("top")}
-                pk={pk} copy={copy} selectedPlan={selectedPlan}
-              />
-            )}
-            {screen === "reserve" && (
-              <ReserveScreen
-                date={date} time={time} adult={adult} child={child}
-                onDate={setDate} onTime={setTime} onAdult={setAdult} onChild={setChild}
-                onNext={() => go("account")} onBack={() => go("plans")}
-                pk={pk} copy={copy}
-              />
-            )}
-            {screen === "account" && (
-              <AccountScreen
-                onGuest={() => go("customer")} onMember={() => go("auth")}
-                onBack={() => go("reserve")} pk={pk} copy={copy}
-              />
-            )}
-            {screen === "auth" && <AuthScreen onNext={() => go("code")} onBack={() => go("account")} pk={pk} />}
-            {screen === "code" && <CodeScreen onNext={() => go("password")} onBack={() => go("auth")} pk={pk} />}
-            {screen === "password" && <PasswordScreen onNext={() => go("customer")} onBack={() => go("code")} pk={pk} />}
-            {screen === "customer" && <CustomerScreen onNext={() => go("memo")} onBack={() => go("account")} pk={pk} />}
-            {screen === "memo" && <MemoScreen onNext={() => go("payment")} onBack={() => go("customer")} pk={pk} copy={copy} />}
-            {screen === "payment" && (
-              <PaymentScreen
-                payment={payment} onPayment={setPayment}
-                onNext={() => go("confirm")} onBack={() => go("memo")}
-                pk={pk} copy={copy}
-              />
-            )}
-            {screen === "confirm" && (
-              <ConfirmScreen
-                plan={selectedPlan} date={date} time={time}
-                adult={adult} child={child} payment={payment}
-                onNext={() => go("complete")} onBack={() => go("payment")}
-                pk={pk} copy={copy}
-              />
-            )}
-            {screen === "complete" && (
-              <CompleteScreen
-                plan={selectedPlan} date={date} time={time}
-                adult={adult} child={child} onReset={resetDemo}
-                pk={pk} copy={copy}
-              />
+          <Stepper active={activeStep} />
+          <div className={`booking-workspace ${bookingAction ? "has-action" : ""}`}>
+            <div className="shell">
+              {screen === "plans" && (
+                <PlansScreen
+                  selected={planId} onSelect={setPlanId}
+                  onNext={() => go("reserve")} onBack={() => go("top")}
+                  pk={pk} copy={copy} selectedPlan={selectedPlan}
+                />
+              )}
+              {screen === "reserve" && (
+                <ReserveScreen
+                  date={date} time={time} adult={adult} child={child}
+                  onDate={setDate} onTime={setTime} onAdult={setAdult} onChild={setChild}
+                  onNext={() => go("account")} onBack={() => go("plans")}
+                  pk={pk} copy={copy}
+                />
+              )}
+              {screen === "account" && (
+                <AccountScreen
+                  onGuest={() => go("customer")} onMember={() => go("auth")}
+                  onBack={() => go("reserve")} pk={pk} copy={copy}
+                />
+              )}
+              {screen === "auth" && <AuthScreen onNext={() => go("code")} onBack={() => go("account")} pk={pk} />}
+              {screen === "code" && <CodeScreen onNext={() => go("password")} onBack={() => go("auth")} pk={pk} />}
+              {screen === "password" && <PasswordScreen onNext={() => go("customer")} onBack={() => go("code")} pk={pk} />}
+              {screen === "customer" && <CustomerScreen onNext={() => go("memo")} onBack={() => go("account")} pk={pk} />}
+              {screen === "memo" && <MemoScreen onNext={() => go("payment")} onBack={() => go("customer")} pk={pk} copy={copy} />}
+              {screen === "payment" && (
+                <PaymentScreen
+                  payment={payment} onPayment={setPayment}
+                  onNext={() => go("confirm")} onBack={() => go("memo")}
+                  pk={pk} copy={copy}
+                />
+              )}
+              {screen === "confirm" && (
+                <ConfirmScreen
+                  plan={selectedPlan} date={date} time={time}
+                  adult={adult} child={child} payment={payment}
+                  onNext={() => go("complete")} onBack={() => go("payment")}
+                  pk={pk} copy={copy}
+                />
+              )}
+              {screen === "complete" && (
+                <CompleteScreen
+                  plan={selectedPlan} date={date} time={time}
+                  adult={adult} child={child} onReset={resetDemo}
+                  pk={pk} copy={copy}
+                />
+              )}
+              {navMode === "bottom" && bookingAction && (
+                <BookingInlineAction action={bookingAction} />
+              )}
+            </div>
+            {navMode === "bottom" && bookingAction && (
+              <BookingActionTray action={bookingAction} />
             )}
           </div>
         </>
@@ -157,10 +209,177 @@ function App() {
   );
 }
 
+function getBookingActionState({ screen, selectedPlan, date, time, adult, child, payment, go }) {
+  const people = `大人${adult}名${child ? ` / 小人${child}名` : ""}`;
+  const paymentTitle = paymentOptions.find(([key]) => key === payment)?.[1] ?? "支払い方法";
+  const summaryItems = getBookingSummaryItems({
+    screen,
+    selectedPlan,
+    date,
+    time,
+    people,
+    paymentTitle,
+  });
+
+  if (screen === "plans") {
+    return {
+      summaryLabel: selectedPlan ? "選択中" : "未選択",
+      summaryValue: selectedPlan?.title ?? "プランを選択してください",
+      summaryItems,
+      ctaLabel: selectedPlan ? "このプランで日時へ" : "日時へ進む",
+      disabled: !selectedPlan,
+      disabledHint: "プランを選ぶと進めます",
+      onPrimary: () => go("reserve"),
+    };
+  }
+
+  if (screen === "reserve") {
+    return {
+      summaryLabel: time ? "日時と人数" : "未選択",
+      summaryValue: time ? `${date} ${time} / ${people}` : "来園時間を選んでください",
+      summaryItems,
+      ctaLabel: "予約者情報へ",
+      disabled: !time,
+      disabledHint: "来園時間を選ぶと進めます",
+      onPrimary: () => go("account"),
+    };
+  }
+
+  if (screen === "auth") {
+    return {
+      summaryLabel: "メール確認",
+      summaryValue: "メールアドレスを確認します",
+      summaryItems,
+      ctaLabel: "認証コードを受け取る",
+      onPrimary: () => go("code"),
+    };
+  }
+
+  if (screen === "code") {
+    return {
+      summaryLabel: "認証コード",
+      summaryValue: "届いた番号を入力中",
+      summaryItems,
+      ctaLabel: "次へ",
+      onPrimary: () => go("password"),
+    };
+  }
+
+  if (screen === "password") {
+    return {
+      summaryLabel: "パスワード設定",
+      summaryValue: "次回の予約をスムーズにします",
+      summaryItems,
+      ctaLabel: "お客様情報へ",
+      onPrimary: () => go("customer"),
+    };
+  }
+
+  if (screen === "customer") {
+    return {
+      summaryLabel: "お客様情報",
+      summaryValue: "当日のご案内先を入力中",
+      summaryItems,
+      ctaLabel: "来園メモへ",
+      onPrimary: () => go("memo"),
+    };
+  }
+
+  if (screen === "memo") {
+    return {
+      summaryLabel: "連絡事項",
+      summaryValue: "任意入力",
+      summaryItems,
+      ctaLabel: "お支払いへ",
+      onPrimary: () => go("payment"),
+    };
+  }
+
+  if (screen === "payment") {
+    return {
+      summaryLabel: "支払い",
+      summaryValue: paymentTitle,
+      summaryItems,
+      ctaLabel: "予約内容を確認する",
+      onPrimary: () => go("confirm"),
+    };
+  }
+
+  if (screen === "confirm") {
+    return {
+      summaryLabel: "最終確認",
+      summaryValue: selectedPlan?.title ?? "予約内容",
+      summaryItems,
+      ctaLabel: "この内容で予約する",
+      onPrimary: () => go("complete"),
+    };
+  }
+
+  return null;
+}
+
+function getBookingSummaryItems({ screen, selectedPlan, date, time, people, paymentTitle }) {
+  const step = screenToStep[screen] ?? 0;
+  const items = [];
+
+  items.push({
+    label: "プラン",
+    value: selectedPlan?.title ?? "未選択",
+    status: selectedPlan ? "done" : "current",
+  });
+
+  if (selectedPlan && step >= 2) {
+    items.push({
+      label: "日時",
+      value: time ? `${date} ${time}` : "来園時間を選択中",
+      status: time ? "done" : "current",
+    });
+    items.push({
+      label: "人数",
+      value: people,
+      status: "done",
+    });
+  }
+
+  if (time && step >= 3 && screen !== "account") {
+    items.push({
+      label: "予約者",
+      value: step >= 4 ? "入力済み" : "入力中",
+      status: step >= 4 ? "done" : "current",
+    });
+  }
+
+  if (time && step >= 3 && ["memo", "payment", "confirm"].includes(screen)) {
+    items.push({
+      label: "連絡事項",
+      value: screen === "memo" ? "任意入力" : "入力済み",
+      status: screen === "memo" ? "current" : "done",
+    });
+  }
+
+  if (step >= 4) {
+    items.push({
+      label: "支払い",
+      value: paymentTitle,
+      status: step >= 5 ? "done" : "current",
+    });
+  }
+
+  if (step >= 5) {
+    items.push({
+      label: "確認",
+      value: "最終確認",
+      status: "current",
+    });
+  }
+
+  return items;
+}
+
 /* ================================================
    Demo Header
    ================================================ */
-function DemoHeader({ patternKey, onPattern, onReset }) {
+function DemoHeader({ patternKey, navMode, onPattern, onNavMode, onReset }) {
   return (
     <header className="demo-header">
       <div className="demo-tabs">
@@ -174,10 +393,73 @@ function DemoHeader({ patternKey, onPattern, onReset }) {
           </button>
         ))}
       </div>
+      <div className="nav-mode-toggle" aria-label="ナビゲーション表示">
+        <button
+          className={navMode === "classic" ? "is-active" : ""}
+          type="button"
+          onClick={() => onNavMode("classic")}
+        >
+          上部
+        </button>
+        <button
+          className={navMode === "bottom" ? "is-active" : ""}
+          type="button"
+          onClick={() => onNavMode("bottom")}
+        >
+          下部
+        </button>
+      </div>
       <button className="icon-button" aria-label="TOPへ戻る" onClick={onReset}>
         <Home size={18} />
       </button>
     </header>
+  );
+}
+
+function BookingActionTray({ action }) {
+  return (
+    <aside className="booking-action-tray" aria-label="予約サマリー">
+      <div className="booking-summary-heading">
+        <small>予約サマリー</small>
+        <strong>決まった内容</strong>
+      </div>
+      <ol className="booking-summary-list">
+        {action.summaryItems.map((item) => (
+          <li className={`booking-summary-item is-${item.status}`} key={item.label}>
+            <span className="booking-summary-mark">
+              {item.status === "done" ? <Check size={14} /> : null}
+            </span>
+            <span className="booking-summary-copy">
+              <small>{item.label}</small>
+              <strong>{item.value}</strong>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  );
+}
+
+function BookingInlineAction({ action }) {
+  return (
+    <div className="booking-inline-action">
+      <div className="booking-inline-summary">
+        <small>{action.summaryLabel}</small>
+        <strong>{action.summaryValue}</strong>
+        {action.disabled && action.disabledHint && (
+          <span>{action.disabledHint}</span>
+        )}
+      </div>
+      <button
+        className="primary-action booking-inline-cta"
+        disabled={action.disabled}
+        onClick={action.disabled ? undefined : action.onPrimary}
+        type="button"
+      >
+        {action.ctaLabel}
+        <ArrowRight size={18} />
+      </button>
+    </div>
   );
 }
 
@@ -278,26 +560,58 @@ function SectionHeader({ eyebrow, title, icon, pk }) {
 /* ================================================
    TOP Screen — concept-specific benefits
    ================================================ */
-function TopScreen({ hero, pk, onStart }) {
+function TopScreen({ hero, pk, onStart, onPlanStart }) {
   return (
     <>
-      <section className="hero">
-        <img src={hero.image} alt="" />
-        {(pk === "glassmorphism" || pk === "studio") && <div className="hero-shade" />}
-        <div className="hero-content">
-          <p className="eyebrow">{hero.eyebrow}</p>
-          <h1>{hero.headline}</h1>
-          <p>{hero.lead}</p>
-          <div className="hero-actions">
+      <section className="qr-entry">
+        <img className="qr-entry-hero-image" src={hero.image} alt="" />
+        <div className="qr-entry-copy">
+          <h1>サンプル体験パーク様専用ご予約サイト</h1>
+          <div className="qr-entry-actions">
             <button className="primary-action" onClick={onStart}>
-              {hero.cta}
-              <ArrowRight size={20} />
+              ご予約画面へ
+              <ArrowRight size={18} />
             </button>
+          </div>
+          <div className="qr-entry-facts" aria-label="予約状況">
+            <span><strong>{plans.length}</strong>件公開中</span>
+          </div>
+        </div>
+
+        <div className="qr-plan-panel" aria-label="現在公開中のプラン">
+          <div className="qr-plan-panel-head">
+            <small>公開中のプラン</small>
+            <strong>空き時間を選んで予約へ</strong>
+          </div>
+          <div className="qr-plan-list">
+            {plans.map((plan) => (
+              <button className="qr-plan-card" key={plan.id} type="button" onClick={() => onPlanStart(plan.id)}>
+                <img src={plan.image} alt="" />
+                <span>
+                  <strong>{plan.title}</strong>
+                  <small>{plan.pr}</small>
+                  <em>{timeOptions.slice(0, 3).join(" / ")}</em>
+                </span>
+                <ArrowRight size={18} />
+              </button>
+            ))}
           </div>
         </div>
       </section>
-      <BenefitsSection benefits={hero.benefits} pk={pk} />
+      <BookingNotice pk={pk} />
     </>
+  );
+}
+
+function BookingNotice({ pk }) {
+  return (
+    <section className={`booking-notice booking-notice-${pk}`} aria-labelledby="booking-notice-title">
+      <h2 id="booking-notice-title">ご予約について</h2>
+      <ul>
+        <li>定員は果物の状況により増減します。</li>
+        <li>一度、予約を締め切った日でも予約を再開する場合があります。</li>
+      </ul>
+    </section>
   );
 }
 
@@ -390,6 +704,13 @@ function PlanCardContent({ plan, selected, onSelect }) {
           {isSelected ? "選択中" : "選択"}
         </button>
       </div>
+      {isSelected && (
+        <div className="plan-selected-expand">
+          <CheckCircle2 size={18} />
+          <span>選択済み</span>
+          <strong>予約プラン</strong>
+        </div>
+      )}
     </>
   );
 }
@@ -417,16 +738,23 @@ function PlansScreen({ selected, onSelect, onNext, onBack, pk, copy, selectedPla
     }
     if (pk === "studio") {
       return (
-        <div className="studio-plan-list">
-          {plans.map((plan, i) => (
-            <div className={`studio-plan-row ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
-              <span className="studio-plan-index">{String(i + 1).padStart(2, "0")}</span>
-              <img src={plan.image} alt="" />
-              <div className="studio-plan-copy">
-                <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+        <div className="studio-carousel-shell">
+          <div className="studio-swipe-hint" aria-hidden="true">
+            <ChevronLeft size={14} />
+            <span>左右にスワイプ</span>
+            <ChevronRight size={14} />
+          </div>
+          <div className="studio-plan-list">
+            {plans.map((plan, i) => (
+              <div className={`studio-plan-row ${selected === plan.id ? "is-selected" : ""}`} key={plan.id}>
+                <span className="studio-plan-index">{String(i + 1).padStart(2, "0")}</span>
+                <img src={plan.image} alt="" />
+                <div className="studio-plan-copy">
+                  <PlanCardContent plan={plan} selected={selected} onSelect={onSelect} />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       );
     }
@@ -855,6 +1183,9 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
           <span>CONFIRMED</span>
         </div>
         <div className="bento-receipt-ref">予約番号: SAMPLE-0528</div>
+        <button className="primary-action receipt-reset-action" onClick={onReset}>
+          TOPへ戻る <Home size={18} />
+        </button>
       </div>
       <div className="bento-bottom-bar">
         <div className="bento-bar-info"><small>予約完了</small><strong>サンプル体験パーク</strong></div>
