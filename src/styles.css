@@ -3151,6 +3151,545 @@ button { cursor: pointer; }
 }
 
 /* ================================================
+   Enterprise Design System Booking Patterns
+   ================================================ */
+.pattern-material.app,
+.pattern-apple.app,
+.pattern-carbon.app,
+.pattern-ant.app,
+.pattern-fluent.app,
+.pattern-primer.app,
+.pattern-atlassian.app,
+.pattern-slds.app,
+.pattern-sap.app,
+.pattern-fds.app {
+  background-attachment: fixed;
+}
+.pattern-material.app {
+  background-image:
+    radial-gradient(circle at 82% 12%, rgba(103, 80, 164, 0.14), transparent 330px),
+    linear-gradient(180deg, #fffbfe 0%, #f7f2fa 100%);
+}
+.pattern-apple.app {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background-image: linear-gradient(180deg, #f5f5f7, #e9e9ee);
+}
+.pattern-carbon.app {
+  background-image:
+    linear-gradient(90deg, rgba(22,22,22,0.04) 1px, transparent 1px),
+    linear-gradient(rgba(22,22,22,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.pattern-ant.app {
+  background-image:
+    radial-gradient(circle at 90% 8%, rgba(22, 119, 255, 0.13), transparent 300px),
+    linear-gradient(180deg, #f5f7fa, #eef3fb);
+}
+.pattern-fluent.app {
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(17, 94, 163, 0.10), transparent 280px),
+    linear-gradient(180deg, #f5f5f5, #f8fbff);
+}
+.pattern-primer.app {
+  background-image:
+    linear-gradient(#d0d7de 1px, transparent 1px),
+    linear-gradient(90deg, #d0d7de 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.pattern-atlassian.app {
+  background-image:
+    radial-gradient(circle at 88% 12%, rgba(12, 102, 228, 0.13), transparent 280px),
+    linear-gradient(180deg, #f7f8f9, #eef2f7);
+}
+.pattern-slds.app,
+.pattern-sap.app,
+.pattern-fds.app {
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0.65), transparent 360px),
+    var(--bg-image);
+}
+
+.pattern-material .demo-header,
+.pattern-apple .demo-header,
+.pattern-carbon .demo-header,
+.pattern-ant .demo-header,
+.pattern-fluent .demo-header,
+.pattern-primer .demo-header,
+.pattern-atlassian .demo-header,
+.pattern-slds .demo-header,
+.pattern-sap .demo-header,
+.pattern-fds .demo-header {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+}
+.pattern-material .demo-tab { border-radius: 999px; background: #f3edf7; }
+.pattern-apple .demo-tab { border: 0; border-radius: 999px; background: #e9e9ed; }
+.pattern-carbon .demo-header { background: #161616; border-bottom: 0; }
+.pattern-carbon .demo-tab { border-radius: 0; background: #262626; color: #c6c6c6; border-color: #393939; }
+.pattern-carbon .demo-tab.is-active { background: #0f62fe; color: #fff; box-shadow: none; }
+.pattern-carbon .icon-button,
+.pattern-carbon .nav-mode-toggle { background: #262626; color: #f4f4f4; border-color: #393939; }
+.pattern-ant .demo-tab { border-radius: 6px; background: #fff; border-color: #d9d9d9; }
+.pattern-fluent .demo-tab { border-radius: 4px; background: #f5f5f5; border-color: transparent; }
+.pattern-primer .demo-tab { border-radius: 6px; background: #f6f8fa; border-color: #d0d7de; }
+.pattern-atlassian .demo-tab { border-radius: 3px; background: #f1f2f4; border-color: transparent; }
+.pattern-slds .demo-tab { border-radius: 4px; background: #f3f2f2; border-color: #dddbda; }
+.pattern-sap .demo-tab { border-radius: 4px; background: #eff4f9; border-color: #d9e4ee; }
+.pattern-fds .demo-tab { border-radius: 2px; background: #eef2f7; border-color: #cbd5e1; }
+
+.pattern-material .unified-stepper { background: rgba(255, 251, 254, 0.94); border-bottom: 1px solid #e7e0ec; }
+.pattern-material .step-item.current { border-radius: 999px; background: #eaddff; }
+.pattern-apple .unified-stepper { background: rgba(245,245,247,0.9); border-bottom: 1px solid #d2d2d7; }
+.pattern-apple .step-item { border-radius: 11px; }
+.pattern-apple .step-num { border-radius: 9px; }
+.pattern-carbon .unified-stepper { background: #262626; border-bottom: 0; }
+.pattern-carbon .step-item { border-radius: 0; color: #c6c6c6; }
+.pattern-carbon .step-num { border-radius: 0; background: #393939; color: #f4f4f4; }
+.pattern-carbon .step-item.current { background: #0f62fe; color: #fff; }
+.pattern-ant .unified-stepper,
+.pattern-slds .unified-stepper,
+.pattern-sap .unified-stepper,
+.pattern-fds .unified-stepper { background: rgba(255,255,255,0.94); }
+.pattern-ant .step-item,
+.pattern-ant .step-num { border-radius: 6px; }
+.pattern-fluent .step-item,
+.pattern-fluent .step-num { border-radius: 4px; }
+.pattern-primer .step-item,
+.pattern-primer .step-num { border-radius: 6px; border: 1px solid transparent; }
+.pattern-primer .step-item.current { border-color: #d0d7de; background: #ddf4ff; }
+.pattern-atlassian .step-item,
+.pattern-atlassian .step-num { border-radius: 3px; }
+.pattern-slds .step-item,
+.pattern-slds .step-num,
+.pattern-sap .step-item,
+.pattern-sap .step-num,
+.pattern-fds .step-item,
+.pattern-fds .step-num { border-radius: 4px; }
+
+.system-section {
+  width: min(100%, 960px);
+  margin: 20px auto 14px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+.system-section-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: var(--chip);
+  color: var(--chip-text);
+  border: 1px solid var(--border);
+}
+.system-section p {
+  margin: 0 0 3px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+.system-section h2 {
+  margin: 0;
+  color: var(--heading);
+  font-size: clamp(22px, 4.2vw, 34px);
+  line-height: 1.15;
+}
+.system-section-material .system-section-icon { border-radius: 18px; border: 0; }
+.system-section-apple .system-section-icon { border-radius: 14px; border: 0; }
+.system-section-carbon,
+.system-section-carbon .system-section-icon { border-radius: 0; }
+.system-section-carbon h2,
+.system-section-carbon p { color: #161616; }
+.system-section-ant .system-section-icon,
+.system-section-fluent .system-section-icon,
+.system-section-slds .system-section-icon,
+.system-section-sap .system-section-icon { border-radius: 6px; }
+.system-section-primer .system-section-icon { border-radius: 6px; background: #fff; }
+.system-section-atlassian .system-section-icon,
+.system-section-fds .system-section-icon { border-radius: 3px; }
+
+.pattern-material .qr-entry,
+.pattern-apple .qr-entry,
+.pattern-carbon .qr-entry,
+.pattern-ant .qr-entry,
+.pattern-fluent .qr-entry,
+.pattern-primer .qr-entry,
+.pattern-atlassian .qr-entry,
+.pattern-slds .qr-entry,
+.pattern-sap .qr-entry,
+.pattern-fds .qr-entry {
+  min-height: 500px;
+}
+.pattern-material .qr-entry-hero-image,
+.pattern-material .qr-entry::after { border-radius: 28px; }
+.pattern-apple .qr-entry-hero-image,
+.pattern-apple .qr-entry::after { border-radius: 30px; }
+.pattern-carbon .qr-entry-hero-image,
+.pattern-carbon .qr-entry::after { border-radius: 0; }
+.pattern-ant .qr-entry-hero-image,
+.pattern-ant .qr-entry::after,
+.pattern-slds .qr-entry-hero-image,
+.pattern-slds .qr-entry::after,
+.pattern-sap .qr-entry-hero-image,
+.pattern-sap .qr-entry::after,
+.pattern-fds .qr-entry-hero-image,
+.pattern-fds .qr-entry::after { border-radius: 8px; }
+.pattern-fluent .qr-entry-hero-image,
+.pattern-fluent .qr-entry::after,
+.pattern-primer .qr-entry-hero-image,
+.pattern-primer .qr-entry::after,
+.pattern-atlassian .qr-entry-hero-image,
+.pattern-atlassian .qr-entry::after { border-radius: 12px; }
+.pattern-carbon .qr-entry::after {
+  background: linear-gradient(90deg, rgba(22,22,22,0.90), rgba(22,22,22,0.52), rgba(22,22,22,0.08));
+}
+.pattern-apple .qr-entry::after {
+  background: linear-gradient(90deg, rgba(0,0,0,0.58), rgba(0,0,0,0.25), transparent);
+}
+.pattern-material .qr-entry .primary-action,
+.pattern-apple .qr-entry .primary-action {
+  border-radius: 999px;
+}
+.pattern-carbon .qr-entry .primary-action {
+  border-radius: 0;
+  box-shadow: none;
+}
+.pattern-ant .qr-entry .primary-action,
+.pattern-slds .qr-entry .primary-action,
+.pattern-sap .qr-entry .primary-action {
+  border-radius: 6px;
+}
+.pattern-fluent .qr-entry .primary-action,
+.pattern-primer .qr-entry .primary-action,
+.pattern-atlassian .qr-entry .primary-action,
+.pattern-fds .qr-entry .primary-action {
+  border-radius: 4px;
+}
+
+.pattern-material .shell { width: min(100%, 980px); }
+.pattern-apple .shell { width: min(100%, 920px); }
+.pattern-carbon .shell,
+.pattern-ant .shell,
+.pattern-fds .shell { width: min(100%, 1180px); }
+.pattern-fluent .shell,
+.pattern-slds .shell,
+.pattern-sap .shell { width: min(100%, 1120px); }
+.pattern-primer .shell,
+.pattern-atlassian .shell { width: min(100%, 1040px); }
+
+.pattern-material .bento-ticket-grid,
+.pattern-apple .bento-ticket-grid,
+.pattern-carbon .bento-ticket-grid,
+.pattern-ant .bento-ticket-grid,
+.pattern-fluent .bento-ticket-grid,
+.pattern-primer .bento-ticket-grid,
+.pattern-atlassian .bento-ticket-grid,
+.pattern-slds .bento-ticket-grid,
+.pattern-sap .bento-ticket-grid,
+.pattern-fds .bento-ticket-grid {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  display: grid;
+  gap: 12px;
+}
+.pattern-material .bento-ticket-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pattern-apple .bento-ticket-grid { grid-template-columns: 1fr; }
+.pattern-carbon .bento-ticket-grid,
+.pattern-ant .bento-ticket-grid,
+.pattern-slds .bento-ticket-grid,
+.pattern-sap .bento-ticket-grid,
+.pattern-fds .bento-ticket-grid { grid-template-columns: 1fr; }
+.pattern-fluent .bento-ticket-grid,
+.pattern-primer .bento-ticket-grid,
+.pattern-atlassian .bento-ticket-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.pattern-material .bento-ticket,
+.pattern-apple .bento-ticket,
+.pattern-carbon .bento-ticket,
+.pattern-ant .bento-ticket,
+.pattern-fluent .bento-ticket,
+.pattern-primer .bento-ticket,
+.pattern-atlassian .bento-ticket,
+.pattern-slds .bento-ticket,
+.pattern-sap .bento-ticket,
+.pattern-fds .bento-ticket,
+.pattern-material .panel,
+.pattern-apple .panel,
+.pattern-carbon .panel,
+.pattern-ant .panel,
+.pattern-fluent .panel,
+.pattern-primer .panel,
+.pattern-atlassian .panel,
+.pattern-slds .panel,
+.pattern-sap .panel,
+.pattern-fds .panel {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.pattern-material .bento-ticket,
+.pattern-material .panel { border-radius: 24px; border: 0; }
+.pattern-apple .bento-ticket,
+.pattern-apple .panel { border-radius: 18px; border-color: transparent; }
+.pattern-carbon .bento-ticket,
+.pattern-carbon .panel {
+  border-radius: 0;
+  box-shadow: none;
+  border-color: #c6c6c6;
+}
+.pattern-ant .bento-ticket,
+.pattern-ant .panel { border-radius: 8px; }
+.pattern-fluent .bento-ticket,
+.pattern-fluent .panel { border-radius: 6px; }
+.pattern-primer .bento-ticket,
+.pattern-primer .panel { border-radius: 6px; box-shadow: none; }
+.pattern-atlassian .bento-ticket,
+.pattern-atlassian .panel { border-radius: 3px; }
+.pattern-slds .bento-ticket,
+.pattern-slds .panel,
+.pattern-sap .bento-ticket,
+.pattern-sap .panel,
+.pattern-fds .bento-ticket,
+.pattern-fds .panel { border-radius: 4px; }
+
+.pattern-carbon .bento-ticket,
+.pattern-ant .bento-ticket,
+.pattern-slds .bento-ticket,
+.pattern-sap .bento-ticket,
+.pattern-fds .bento-ticket {
+  grid-template-columns: 120px minmax(0, 1fr);
+  grid-template-rows: auto;
+}
+.pattern-carbon .bento-ticket img,
+.pattern-ant .bento-ticket img,
+.pattern-slds .bento-ticket img,
+.pattern-sap .bento-ticket img,
+.pattern-fds .bento-ticket img {
+  width: 120px;
+  height: 100%;
+  min-height: 150px;
+  border-radius: 0;
+}
+.pattern-apple .bento-ticket {
+  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-rows: auto;
+  align-items: stretch;
+}
+.pattern-apple .bento-ticket img {
+  width: 150px;
+  height: 100%;
+  min-height: 160px;
+  border-radius: 18px 0 0 18px;
+}
+.pattern-material .bento-ticket img { border-radius: 24px 24px 0 0; }
+.pattern-fluent .bento-ticket img,
+.pattern-primer .bento-ticket img,
+.pattern-atlassian .bento-ticket img { height: 150px; }
+
+.pattern-material .primary-action,
+.pattern-material .back-action,
+.pattern-material .plan-detail-btn,
+.pattern-material .plan-select-btn,
+.pattern-material .choice-grid button,
+.pattern-material .counter-row button,
+.pattern-material .payment-list button,
+.pattern-apple .primary-action,
+.pattern-apple .back-action,
+.pattern-apple .plan-detail-btn,
+.pattern-apple .plan-select-btn,
+.pattern-apple .choice-grid button,
+.pattern-apple .counter-row button,
+.pattern-apple .payment-list button {
+  border-radius: 999px;
+}
+.pattern-carbon .primary-action,
+.pattern-carbon .back-action,
+.pattern-carbon .plan-detail-btn,
+.pattern-carbon .plan-select-btn,
+.pattern-carbon .choice-grid button,
+.pattern-carbon .counter-row button,
+.pattern-carbon .payment-list button,
+.pattern-carbon .field input,
+.pattern-carbon .field textarea {
+  border-radius: 0;
+  box-shadow: none;
+}
+.pattern-ant .primary-action,
+.pattern-ant .back-action,
+.pattern-ant .plan-detail-btn,
+.pattern-ant .plan-select-btn,
+.pattern-ant .choice-grid button,
+.pattern-ant .counter-row button,
+.pattern-ant .payment-list button,
+.pattern-ant .field input,
+.pattern-ant .field textarea,
+.pattern-slds .primary-action,
+.pattern-slds .back-action,
+.pattern-slds .plan-detail-btn,
+.pattern-slds .plan-select-btn,
+.pattern-slds .choice-grid button,
+.pattern-slds .counter-row button,
+.pattern-slds .payment-list button,
+.pattern-slds .field input,
+.pattern-slds .field textarea,
+.pattern-sap .primary-action,
+.pattern-sap .back-action,
+.pattern-sap .plan-detail-btn,
+.pattern-sap .plan-select-btn,
+.pattern-sap .choice-grid button,
+.pattern-sap .counter-row button,
+.pattern-sap .payment-list button,
+.pattern-sap .field input,
+.pattern-sap .field textarea,
+.pattern-fds .primary-action,
+.pattern-fds .back-action,
+.pattern-fds .plan-detail-btn,
+.pattern-fds .plan-select-btn,
+.pattern-fds .choice-grid button,
+.pattern-fds .counter-row button,
+.pattern-fds .payment-list button,
+.pattern-fds .field input,
+.pattern-fds .field textarea {
+  border-radius: 4px;
+}
+.pattern-fluent .primary-action,
+.pattern-fluent .back-action,
+.pattern-fluent .plan-detail-btn,
+.pattern-fluent .plan-select-btn,
+.pattern-primer .primary-action,
+.pattern-primer .back-action,
+.pattern-primer .plan-detail-btn,
+.pattern-primer .plan-select-btn,
+.pattern-atlassian .primary-action,
+.pattern-atlassian .back-action,
+.pattern-atlassian .plan-detail-btn,
+.pattern-atlassian .plan-select-btn {
+  border-radius: 6px;
+}
+.pattern-carbon .primary-action {
+  background: #0f62fe;
+}
+.pattern-primer .primary-action,
+.pattern-primer .plan-select-btn.is-selected {
+  background: #238636;
+}
+.pattern-atlassian .primary-action {
+  background: #0c66e4;
+}
+.pattern-fds .primary-action {
+  background: #005bac;
+}
+
+.pattern-material .choice-grid,
+.pattern-apple .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pattern-carbon .choice-grid,
+.pattern-ant .choice-grid,
+.pattern-fds .choice-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.pattern-slds .choice-grid,
+.pattern-sap .choice-grid,
+.pattern-fluent .choice-grid,
+.pattern-primer .choice-grid,
+.pattern-atlassian .choice-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.pattern-carbon .field-grid,
+.pattern-ant .field-grid,
+.pattern-fds .field-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pattern-material .bento-bottom-bar,
+.pattern-apple .bento-bottom-bar {
+  border-radius: 24px 24px 0 0;
+  border: 0;
+}
+.pattern-carbon .bento-bottom-bar {
+  border-radius: 0;
+  border-top: 2px solid #0f62fe;
+  box-shadow: none;
+}
+.pattern-ant .bento-bottom-bar,
+.pattern-fluent .bento-bottom-bar,
+.pattern-primer .bento-bottom-bar,
+.pattern-atlassian .bento-bottom-bar,
+.pattern-slds .bento-bottom-bar,
+.pattern-sap .bento-bottom-bar,
+.pattern-fds .bento-bottom-bar {
+  border-radius: 8px 8px 0 0;
+}
+.pattern-primer .bento-bottom-bar {
+  box-shadow: 0 -1px 0 #d0d7de;
+}
+
+.pattern-material .bento-receipt-card,
+.pattern-apple .bento-receipt-card,
+.pattern-carbon .bento-receipt-card,
+.pattern-ant .bento-receipt-card,
+.pattern-fluent .bento-receipt-card,
+.pattern-primer .bento-receipt-card,
+.pattern-atlassian .bento-receipt-card,
+.pattern-slds .bento-receipt-card,
+.pattern-sap .bento-receipt-card,
+.pattern-fds .bento-receipt-card {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.pattern-material .bento-receipt-card { border-radius: 28px; border: 0; }
+.pattern-apple .bento-receipt-card { border-radius: 22px; border-color: transparent; }
+.pattern-carbon .bento-receipt-card { border-radius: 0; box-shadow: none; }
+.pattern-ant .bento-receipt-card,
+.pattern-fluent .bento-receipt-card,
+.pattern-primer .bento-receipt-card,
+.pattern-atlassian .bento-receipt-card,
+.pattern-slds .bento-receipt-card,
+.pattern-sap .bento-receipt-card,
+.pattern-fds .bento-receipt-card { border-radius: 8px; }
+.pattern-carbon .bento-receipt-header,
+.pattern-carbon .bento-receipt-stamp {
+  border-radius: 0;
+}
+
+@media (max-width: 760px) {
+  .pattern-material .bento-ticket-grid,
+  .pattern-fluent .bento-ticket-grid,
+  .pattern-primer .bento-ticket-grid,
+  .pattern-atlassian .bento-ticket-grid {
+    grid-template-columns: 1fr;
+  }
+  .pattern-carbon .bento-ticket,
+  .pattern-ant .bento-ticket,
+  .pattern-slds .bento-ticket,
+  .pattern-sap .bento-ticket,
+  .pattern-fds .bento-ticket,
+  .pattern-apple .bento-ticket {
+    grid-template-columns: 1fr;
+  }
+  .pattern-carbon .bento-ticket img,
+  .pattern-ant .bento-ticket img,
+  .pattern-slds .bento-ticket img,
+  .pattern-sap .bento-ticket img,
+  .pattern-fds .bento-ticket img,
+  .pattern-apple .bento-ticket img {
+    width: 100%;
+    height: 150px;
+    border-radius: inherit;
+  }
+  .pattern-carbon .choice-grid,
+  .pattern-ant .choice-grid,
+  .pattern-fds .choice-grid,
+  .pattern-carbon .field-grid,
+  .pattern-ant .field-grid,
+  .pattern-fds .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ================================================
    Responsive: Small Mobile (390px safe)
    ================================================ */
 @media (max-width: 400px) {

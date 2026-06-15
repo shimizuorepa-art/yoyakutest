@@ -47,6 +47,36 @@ const Icon = ({ as: Component, size = 20 }) => (
   <Component size={size} strokeWidth={2.4} />
 );
 
+const trayPatternKeys = new Set([
+  "bento",
+  "craft",
+  "studio",
+  "puerto",
+  "material",
+  "apple",
+  "carbon",
+  "ant",
+  "fluent",
+  "primer",
+  "atlassian",
+  "slds",
+  "sap",
+  "fds",
+]);
+
+const enterpriseSectionKeys = new Set([
+  "material",
+  "apple",
+  "carbon",
+  "ant",
+  "fluent",
+  "primer",
+  "atlassian",
+  "slds",
+  "sap",
+  "fds",
+]);
+
 function App() {
   const [patternKey, setPatternKey] = useState(() =>
     getInitial("pattern", "bento")
@@ -533,6 +563,20 @@ function SectionHeader({ eyebrow, title, icon, pk }) {
     );
   }
 
+  if (enterpriseSectionKeys.has(pk)) {
+    return (
+      <div className={`system-section system-section-${pk}`}>
+        <span className="system-section-icon">
+          <Icon as={icon} size={18} />
+        </span>
+        <div>
+          <p>{eyebrow}</p>
+          <h2>{title}</h2>
+        </div>
+      </div>
+    );
+  }
+
   if (pk === "glassmorphism") {
     return (
       <div className="glass-section">
@@ -909,7 +953,7 @@ function ReserveScreen({ date, time, adult, child, onDate, onTime, onAdult, onCh
     <>
       <SectionHeader eyebrow={copy.dateEyebrow} title={copy.dateTitle} icon={CalendarDays} pk={pk} />
       {content}
-      {pk === "bento" || pk === "craft" || pk === "studio" || pk === "puerto" ? (
+      {trayPatternKeys.has(pk) ? (
         <>
           <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>
           <div className="bento-bottom-bar">
@@ -1067,7 +1111,7 @@ function ConfirmScreen({ plan, date, time, adult, child, payment, onNext, onBack
     );
   }
 
-  if (pk === "bento" || pk === "craft" || pk === "studio" || pk === "puerto") {
+  if (trayPatternKeys.has(pk)) {
     return (
       <>
         <SectionHeader eyebrow={copy.confirmEyebrow} title={copy.confirmTitle} icon={CheckCircle2} pk={pk} />
@@ -1168,7 +1212,7 @@ function CompleteScreen({ plan, date, time, adult, child, onReset, pk, copy }) {
     );
   }
 
-  // bento / craft / studio / puerto
+  // bento / craft / studio / puerto / design-system approximation patterns
   return (
     <>
       <div className="bento-receipt-card bento-receipt-complete">
@@ -1226,7 +1270,7 @@ function CtaBlock({ pk, onNext, onBack, nextLabel = "次へ", disabled = false }
       </div>
     );
   }
-  if (pk === "bento" || pk === "craft" || pk === "studio" || pk === "puerto") {
+  if (trayPatternKeys.has(pk)) {
     return (
       <>
         {onBack && <button className="back-action" onClick={onBack}><ArrowLeft size={18} /> もどる</button>}

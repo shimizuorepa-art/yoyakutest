@@ -9,6 +9,16 @@
   - `craft`: Craft
   - `studio`: Studio
   - `puerto`: Puerto Reservation
+  - `material`: Material Booking
+  - `apple`: Apple Native Booking
+  - `carbon`: Carbon Ops Booking
+  - `ant`: Ant Admin Booking
+  - `fluent`: Fluent Workspace Booking
+  - `primer`: Primer Dev/Event Booking
+  - `atlassian`: Atlassian Team Booking
+  - `slds`: SLDS CRM Booking
+  - `sap`: SAP Process Booking
+  - `fds`: FDS Japanese Booking
 - Full happy path:
   `TOP -> プラン選択 -> 日時・人数 -> お客様情報 -> 来園メモ -> 支払い -> 確認 -> 完了`
 - Account branch:
@@ -21,6 +31,16 @@
 /?pattern=craft
 /?pattern=studio
 /?pattern=puerto
+/?pattern=material
+/?pattern=apple
+/?pattern=carbon
+/?pattern=ant
+/?pattern=fluent
+/?pattern=primer
+/?pattern=atlassian
+/?pattern=slds
+/?pattern=sap
+/?pattern=fds
 ```
 
 The previous `neumorphism` and `glassmorphism` query keys remain as compatibility redirects, but they are no longer active review concepts.
@@ -56,6 +76,8 @@ The four active review concepts are registered as reusable design-system referen
 - `craft`: Craft Harvest
 - `studio`: Orchard Gallery Studio
 - `puerto`: Puerto Reservation
+
+The enterprise design-system patterns are internal approximation demos for comparison. They are not official component-library implementations.
 
 ## Notes
 
